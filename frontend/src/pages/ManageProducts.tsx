@@ -39,7 +39,7 @@ const ManageProducts: React.FC = () => {
         <Header title="Products" description="Manage your Products " />
         {checkPermission(appData?.userRole, "Product", "Add") && (
           <Link to="/manage-products/new">
-            <Button className="bg-teal-600 hover:bg-teal-500">
+            <Button className="bg-primary hover:bg-secondary">
               Add Product
             </Button>
           </Link>

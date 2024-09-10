@@ -9,6 +9,9 @@ import NewProduct from "./pages/NewProduct";
 import RoleManagement from "./pages/RoleManagement";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Setup from "./pages/Setup";
+import ThemeChanger from "./pages/ThemeChanger";
+import MainPage from "./pages/adminPanel/MainPage";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -21,7 +24,7 @@ function App() {
       const response = await axios.get(
         "http://localhost:3001/installation/check-config"
       );
-      console.log(response);
+      console.log("Config Checking Response:", response.data);
 
       if (response.data.message === "Setup configured") {
         setLoading(false);
@@ -68,10 +71,13 @@ function App() {
 
   return (
     <>
-      <Navbar />
-      <div className="px-4 sm:px-10 lg:px-20">
+      {/* <Navbar /> */}
+      <div className="">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/admin" element={<MainPage />} />
+          <Route path="/install" element={<Setup />} />
+          <Route path="/themes" element={<ThemeChanger />} />
           <Route path="/roles" element={<RoleManagement />} />
           <Route path="/login" element={<Login />} />
           <Route path="/manage-users" element={<ManageUsers />} />

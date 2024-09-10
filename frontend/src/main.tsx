@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Slide, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AppProvider from "./contexts/Appcontext";
+import { ThemeProvider } from "./contexts/ThemeContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -23,13 +24,15 @@ createRoot(document.getElementById("root")!).render(
         theme="light"
         transition={Slide}
         style={{ width: 380 }}
+        limit={3}
       />
-
-      <AppProvider>
-        <div className="roboto-regular">
-          <App />
-        </div>
-      </AppProvider>
+      <ThemeProvider>
+        <AppProvider>
+          <div className="roboto-regular">
+            <App />
+          </div>
+        </AppProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>
 );

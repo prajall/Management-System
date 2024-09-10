@@ -33,9 +33,10 @@ export const addEnvToVercel = async (key: String, value: String) => {
     console.log(error.message ? error.message : error);
     console.error("Error data:", error.response?.data);
 
-    if (error.response.data.error?.code === "ENV_ALREADY_EXISTS") {
+    if (error.response?.data?.error?.code === "ENV_ALREADY_EXISTS") {
       return true;
     }
+    return false;
   }
 };
 

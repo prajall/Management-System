@@ -2,12 +2,13 @@ import express from "express";
 import {
   createProduct,
   deleteProduct,
+  getLatestProducts,
   updateProduct,
   viewAllProducts,
   viewOneProduct,
 } from "../controllers/productController";
 import { authChecker } from "../middlewares/authChecker";
-import { checkPermission } from "../middlewares/checkPermission";
+import { adminChecker, checkPermission } from "../middlewares/checkPermission";
 
 const Router = express.Router();
 
@@ -20,6 +21,7 @@ Router.put(
 );
 // Router.get("/", checkPermission("Product", "View"), viewAllProducts);
 Router.get("/", viewAllProducts);
+Router.get("/latest", authChecker, adminChecker, getLatestProducts);
 Router.get("/:productId", checkPermission("Product", "View"), viewOneProduct);
 Router.delete(
   "/:productId",

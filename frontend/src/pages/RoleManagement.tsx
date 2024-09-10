@@ -112,7 +112,7 @@ const RoleManagement = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button
-            className="bg-teal-600 text-white"
+            className="bg-primary text-white"
             onClick={() => setIsDialogOpen(true)}
           >
             Add Role
@@ -135,7 +135,7 @@ const RoleManagement = () => {
           </div>
           <DialogFooter>
             <Button
-              className="bg-teal-600 hover:bg-teal-500"
+              className="bg-primary hover:bg-secondary"
               onClick={handleAddRole}
             >
               Add Role

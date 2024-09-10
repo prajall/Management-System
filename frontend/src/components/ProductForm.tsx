@@ -66,7 +66,7 @@ const ProductForm = () => {
             placeholder="Enter product title"
             className={`${
               errors.title ? "border-red-500" : ""
-            } focus:ring-teal-600 focus:ring focus:ring-offset-1 focus:ring-opacity-50`}
+            } focus:ring-secondary focus:ring focus:ring-offset-1 focus:ring-opacity-50`}
           />
           {errors.title && (
             <p className="text-red-500 text-sm mt-1">
@@ -86,7 +86,7 @@ const ProductForm = () => {
             placeholder="Enter product description"
             className={`${
               errors.description ? "border-red-500" : ""
-            } h-40 w-full resize-none p-2 focus:ring-teal-600 focus:ring focus:ring-offset-1 focus:ring-opacity-50 focus:outline-none rounded-md`}
+            } h-40 w-full resize-none p-2 focus:ring600 focus:ring focus:ring-offset-1 focus:ring-opacity-50 focus:outline-none rounded-md`}
             style={{ resize: "none" }}
           />
           {errors.description && (
@@ -151,9 +151,9 @@ const ProductForm = () => {
             file:mr-4 file:py-2 file:px-4
             file:rounded-full file:border-0
             file:text-sm file:font-semibold
-            file:bg-teal-50 file:text-teal-700
-            hover:file:bg-teal-100 focus:outline-none
-            focus-visible:ring-2 focus-visible:ring-teal-500
+            file:bg-white file:text-primary
+            hover:file:bg-tertiary focus:outline-none
+            focus-visible:ring-2 focus-visible:ring-secondary
             focus-visible:ring-offset-2 focus-visible:ring-offset-white
             disabled:opacity-50"
                 />
@@ -173,7 +173,7 @@ const ProductForm = () => {
                 </span>
                 <button
                   type="button"
-                  className="absolute top-0 right-0 text-gray-500 hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+                  className="absolute top-0 right-0 text-gray-500 hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-white"
                   onClick={() => reset({ image: null })}
                 >
                   <X className="h-4 w-4" />
@@ -183,7 +183,7 @@ const ProductForm = () => {
           </div>
         </div>
 
-        <Button type="submit" className="w-full bg-teal-600 text-white">
+        <Button type="submit" className="w-full bg-primary text-white">
           Add Product
         </Button>
       </form>

@@ -59,7 +59,7 @@ const Setup = () => {
       if (response.status == 200) {
         setStep(3);
       } else {
-        setError("appName", {
+        setError("productKey", {
           message: response.data ? response.data : "Failed",
         });
       }
@@ -80,10 +80,13 @@ const Setup = () => {
       if (response.status == 200) {
         setStep(4);
       } else {
+        setError("dbUrl", {
+          message: response.data ? response.data : "Failed",
+        });
       }
     } catch (error) {
       console.log(error);
-      setError("appName", {
+      setError("dbUrl", {
         message: "Failed",
       });
     } finally {
@@ -147,20 +150,19 @@ const Setup = () => {
                       required: "App Name is Required",
                     })}
                     placeholder="App Name"
-                    type="appName"
+                    type="text"
                     className="p-3 text-sm w-full mt-1  ring-1 ring-[#000] ring-opacity-20 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green focus:border-transparent"
                   />
                   {errors.appName && (
                     <p className="text-red-500 text-xs mt-1">
-                      {/* {errors.appName.message} */}
-                      Error
+                      {errors.appName.message?.toString()}
                     </p>
                   )}
                 </div>
 
                 <Button
                   type="submit"
-                  className="mt-4 disabled:opacity-80 w-full text-white"
+                  className="mt-4 bg-primary disabled:opacity-80 w-full text-white"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Loading..." : "Next"}
@@ -183,8 +185,7 @@ const Setup = () => {
                   />
                   {errors.productKey && (
                     <p className="text-red-500 text-xs mt-1">
-                      {/* {errors.productKey.message} */}
-                      Error
+                      {errors.productKey.message?.toString()}
                     </p>
                   )}
                 </div>
@@ -223,8 +224,7 @@ const Setup = () => {
                   />
                   {errors.dbUrl && (
                     <p className="text-red-500 text-xs mt-1">
-                      {/* {errors.dbUrl.message} */}
-                      Error
+                      {errors.dbUrl.message?.toString()}
                     </p>
                   )}
                   <label className="text-sm font-semibold mt-4 mb-2 text-black">
@@ -238,8 +238,7 @@ const Setup = () => {
                   />
                   {errors.apiKey && (
                     <p className="text-red-500 text-xs mt-1">
-                      {/* {errors.apiKey.message} */}
-                      Error
+                      {errors.apiKey.message?.toString()}
                     </p>
                   )}
                 </div>
@@ -268,7 +267,7 @@ const Setup = () => {
                 <div className=" w-full flex items-start flex-col mb-3">
                   <p className="text-muted-foreground">
                     Your files are configured. Click finish to complete the
-                    installtion process
+                    installation process
                   </p>
                 </div>
 

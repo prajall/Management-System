@@ -198,7 +198,7 @@ const ManageUsers = () => {
                   value={user.role}
                   onValueChange={(value) => openRoleChangeDialog(user, value)}
                 >
-                  <SelectTrigger className="w-full border-teal-600 max-w-96 text-teal-600">
+                  <SelectTrigger className="w-full border-primary max-w-96 text-primary">
                     {user.role}
                     {/* <SelectValue placeholder="Select role" /> */}
                   </SelectTrigger>
@@ -212,7 +212,7 @@ const ManageUsers = () => {
                 </Select>
               </TableCell>
               <TableCell className="flex justify-center">
-                {/* <Button className="bg-teal-600 text-white">Edit</Button> */}
+                {/* <Button className="bg-primary text-white">Edit</Button> */}
                 <DropdownMenu>
                   <DropdownMenuTrigger>
                     <p className="font-semibold text-center">...</p>
@@ -250,7 +250,7 @@ const ManageUsers = () => {
             <Button
               onClick={handleConfirmRoleChange}
               variant="default"
-              className="bg-teal-600 text-white"
+              className="bg-primary text-white"
             >
               Confirm
             </Button>

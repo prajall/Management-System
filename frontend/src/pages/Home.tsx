@@ -12,7 +12,7 @@ const Home = () => {
   }, [appData?.userRole]);
   return (
     <div className="min-h-[80vh] flex flex-col justify-center">
-      <p className="text-center text-teal-950 text-5xl font-bold max-w-[850px] mx-auto ">
+      <p className="text-center text-black text-5xl font-bold max-w-[850px] mx-auto ">
         Role Based Access Control System
       </p>
 
@@ -23,7 +23,7 @@ const Home = () => {
       {!appData.user && !isLoadingAppData && (
         <Link
           to={"/login"}
-          className="bg-teal-600 text-white py-2 rounded-md hover:bg-teal-500 w-fit mx-auto px-6 mt-4"
+          className="bg-primary text-white py-2 rounded-md hover:bg-secondary w-fit mx-auto px-6 mt-4"
         >
           Login
         </Link>

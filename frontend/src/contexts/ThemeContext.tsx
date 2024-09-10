@@ -3,7 +3,7 @@ import React, { createContext, ReactNode, useEffect, useState } from "react";
 interface ThemeProp {
   primary: string;
   secondary: string;
-  tertiary: string;
+  dark: string;
 }
 
 interface ThemeContextType {
@@ -18,36 +18,39 @@ const defaultThemeContext: ThemeContextType = {
 
 export const availableThemes: Record<string, ThemeProp> = {
   blue: {
-    primary: "#3234f3",
-    secondary: "#2222f3",
-    tertiary: "#33fff3",
+    primary: "#003559",
+    secondary: "#0353a4",
+    dark: "#061a40",
   },
   red: {
-    primary: "#ff0000",
-    secondary: "#cc0000",
-    tertiary: "#990000",
+    primary: "#bd1f36",
+    secondary: "#e01e37",
+    dark: "#641220",
   },
   green: {
-    primary: "#00ff00",
-    secondary: "#00cc00",
-    tertiary: "#009900",
+    primary: "#155d27",
+    secondary: "#208b3a",
+    dark: "#10451d",
   },
 };
 
 const ThemeContext = createContext<ThemeContextType>(defaultThemeContext);
 
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<string>("blue");
+  const [theme, setTheme] = useState<string>(() => {
+    return localStorage.getItem("theme") || "blue";
+  });
 
   useEffect(() => {
     if (availableThemes[theme]) {
-      const { primary, secondary, tertiary } = availableThemes[theme];
+      const { primary, secondary, dark } = availableThemes[theme];
       document.documentElement.style.setProperty("--primary-color", primary);
       document.documentElement.style.setProperty(
         "--secondary-color",
         secondary
       );
-      document.documentElement.style.setProperty("--tertiary-color", tertiary);
+      document.documentElement.style.setProperty("--dark-color", dark);
+      localStorage.setItem("theme", theme);
     }
   }, [theme]);
 

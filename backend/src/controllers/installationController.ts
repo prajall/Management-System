@@ -123,9 +123,18 @@ export const completeInstallation = async (req: Request, res: Response) => {
 export const checkConfig = async (req: Request, res: Response) => {
   const configPath = "config.json";
 
+  console.log("Config checking called");
+
   if (fs.existsSync(configPath)) {
     try {
       const configData = fs.readFileSync(configPath, "utf8");
+
+      // Check if the file is empty
+      if (configData.trim() === "") {
+        console.log("config.json is empty");
+        return res.status(200).json({ message: "Setup not configured" });
+      }
+
       const config = JSON.parse(configData);
 
       if (config.setupComplete) {
@@ -134,11 +143,13 @@ export const checkConfig = async (req: Request, res: Response) => {
         return res.status(200).json({ message: "Setup not configured" });
       }
     } catch (err) {
+      console.error("Error reading or parsing config file:", err);
       return res
         .status(500)
-        .json({ message: "Error reading config file", error: err });
+        .json({ message: "Error reading or parsing config file", error: err });
     }
   } else {
+    console.log("config.json not found");
     return res.status(404).json({ message: "config.json not found" });
   }
 };

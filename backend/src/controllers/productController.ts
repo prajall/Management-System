@@ -131,3 +131,22 @@ export const deleteProduct = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Internal Server Error", error });
   }
 };
+
+export const getLatestProducts = async (req: Request, res: Response) => {
+  console.log("getLatestProducts called");
+  try {
+    const latestProducts = await Product.find()
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    if (!latestProducts || latestProducts.length === 0) {
+      return res.status(404).json({ message: "No products found" });
+    }
+
+    console.log(latestProducts);
+
+    return res.status(200).json(latestProducts);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
