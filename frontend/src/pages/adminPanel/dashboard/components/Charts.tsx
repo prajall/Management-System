@@ -67,19 +67,19 @@ const Charts = () => {
                 <Line
                   type="monotone"
                   dataKey="sales"
-                  stroke="var(--color-sales)"
+                  stroke="var(--primary-color)"
                   strokeWidth={2}
                 />
                 <Line
                   type="monotone"
                   dataKey="purchases"
-                  stroke="var(--color-purchases)"
+                  stroke="var(--secondary-color)"
                   strokeWidth={2}
                 />
                 <Line
                   type="monotone"
                   dataKey="expenses"
-                  stroke="var(--color-expenses)"
+                  stroke="var(--dark-color)"
                   strokeWidth={2}
                 />
               </LineChart>
@@ -96,7 +96,7 @@ const Charts = () => {
         <CardContent className="p-2 sm:p-4 lg:p-6 flex justify-center items-center">
           <ChartContainer
             config={{
-              amount: { label: "Amount", color: "hsl(var(--chart-1))" },
+              amount: { label: "Amount", color: "hsl(var(--secondary-color))" },
             }}
             className="h-[200px] sm:h-[250px] lg:h-[300px]"
           >
@@ -114,7 +114,7 @@ const Charts = () => {
                 />
                 <YAxis tick={{ fontSize: 10 }} />
                 <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="amount" fill="var(--color-amount)" />
+                <Bar dataKey="amount" fill="var(--secondary-color)" />
               </BarChart>
             </ResponsiveContainer>
           </ChartContainer>
