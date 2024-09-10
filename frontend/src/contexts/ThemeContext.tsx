@@ -18,19 +18,19 @@ const defaultThemeContext: ThemeContextType = {
 
 export const availableThemes: Record<string, ThemeProp> = {
   blue: {
-    primary: "#003559",
-    secondary: "#0353a4",
-    dark: "#061a40",
+    primary: "rgb(0, 53, 89)",
+    secondary: "rgb(3, 83, 164)",
+    dark: "rgb(6, 26, 64)",
   },
   red: {
-    primary: "#bd1f36",
-    secondary: "#e01e37",
-    dark: "#641220",
+    primary: "rgb(189, 31, 54)",
+    secondary: "rgb(224, 30, 55)",
+    dark: "rgb(100, 18, 32)",
   },
   green: {
-    primary: "#155d27",
-    secondary: "#208b3a",
-    dark: "#10451d",
+    primary: "rgb(21, 93, 39)",
+    secondary: "rgb(32, 139, 58)",
+    dark: "rgb(16, 69, 29)",
   },
 };
 

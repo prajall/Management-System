@@ -34,13 +34,13 @@ const Charts = () => {
   ];
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-      <Card className="overflow-hidden w-full">
+      <Card className="overflow-hidden w-full ">
         <CardHeader>
           <CardTitle className="text-base sm:text-lg lg:text-xl">
             Sales and Purchase Report Summary - 2024
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-2 sm:p-4 lg:p-6">
+        <CardContent className="p-2 sm:p-4 lg:p-6 mx-auto flex justify-center items-center">
           <ChartContainer
             config={{
               sales: { label: "Sales", color: "hsl(var(--chart-1))" },
@@ -93,7 +93,7 @@ const Charts = () => {
             Expense Statement - 2024
           </CardTitle>
         </CardHeader>
-        <CardContent className="p-2 sm:p-4 lg:p-6">
+        <CardContent className="p-2 sm:p-4 lg:p-6 flex justify-center items-center">
           <ChartContainer
             config={{
               amount: { label: "Amount", color: "hsl(var(--chart-1))" },

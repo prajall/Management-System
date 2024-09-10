@@ -44,13 +44,13 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-56 xl:w-64 bg-white h-screen">
+    <aside className="w-56 xl:w-64 bg-primary text-white h-screen">
       <div className="p-4">
         <h1 className="text-2xl font-bold">SmartGarage</h1>
       </div>
       <nav className="">
         <Link
-          className="block px-4 py-4 font-semibold  hover:bg-gray-50"
+          className="block px-4 py-4 font-semibold hover:bg-primary border-b border-primary"
           to="/admin"
         >
           Dashboard
@@ -60,18 +60,18 @@ const Sidebar = () => {
             <AccordionItem
               value={`item-${index}`}
               key={index}
-              className="hover:bg-gray-50 "
+              className="border-b border-primary"
             >
-              <AccordionTrigger className="px-4 hover:no-underline">
+              <AccordionTrigger className="px-4 hover:no-underline hover:bg-secondary data-[state=open]:bg-secondary">
                 {section.title}
               </AccordionTrigger>
-              <AccordionContent>
-                <ul className="space-y-2">
+              <AccordionContent className="bg-secondary">
+                <ul className="">
                   {section.items.map((item, itemIndex) => (
-                    <li key={itemIndex}>
+                    <li key={itemIndex} className=" py-1">
                       <Link
                         to={item.href}
-                        className="block px-4 ml-1 py-2 hover:bg-gray-100"
+                        className="block hover:bg-primary  px-4 pl-5 py-2"
                       >
                         {item.name}
                       </Link>
