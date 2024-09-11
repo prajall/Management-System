@@ -29,7 +29,7 @@ const Sidebar = ({
       items: [
         { name: "Countries", href: "/admin/countries" },
         { name: "Cities", href: "/admin/cities" },
-        { name: "Territories", href: "/admin/territories" },
+        { name: "Areas", href: "/admin/areas" },
       ],
     },
     {

@@ -7,6 +7,9 @@ import { Menu } from "lucide-react";
 import ManageUsers from "./human-resource/Employees";
 import Settings from "./administration/Settings";
 import RoleManagement from "./human-resource/RoleManagement";
+import Countries from "./master/Countries";
+import Cities from "./master/Cities";
+import Areas from "./master/Areas";
 
 const MainPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -50,6 +53,9 @@ const MainPage = () => {
             <Route path="/employees" element={<ManageUsers />} />
             <Route path="/roles-permissions" element={<RoleManagement />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/countries" element={<Countries />} />
+            <Route path="/cities" element={<Cities />} />
+            <Route path="/areas" element={<Areas />} />
           </Routes>
         </div>
       </div>

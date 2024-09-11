@@ -17,3 +17,13 @@ export interface UserProp {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface City {
+  name: string;
+  areas: string[];
+}
+
+export interface Country {
+  name: string;
+  cities: City[];
+}

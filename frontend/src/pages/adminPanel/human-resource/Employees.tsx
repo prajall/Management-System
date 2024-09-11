@@ -43,6 +43,7 @@ const Employees = () => {
   const [roles, setRoles] = useState<RoleProp[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filteredUsers, setFilteredUsers] = useState<UserProp[]>([]);
 
   const fetchUsers = async () => {
     setIsLoading(true);
@@ -169,13 +170,16 @@ const Employees = () => {
     fetchRoles();
   }, []);
 
-  const filteredUsers = users?.filter(
-    (user) =>
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (user.name
-        ? user.name
-        : "" && user.name?.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  useEffect(() => {
+    const filteredUsers = users?.filter(
+      (user) =>
+        user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.name
+          ? user.name
+          : "" && user.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+    setFilteredUsers(filteredUsers);
+  }, [searchTerm, users]);
 
   return (
     <div className="">
