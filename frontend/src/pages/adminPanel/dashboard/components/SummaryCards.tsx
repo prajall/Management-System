@@ -30,7 +30,7 @@ const SummaryCards = () => {
   ];
 
   return (
-    <div className="grid gap-4 my-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
       {summaryCards.map((card, index) => (
         <Card key={index} className="w-full bg-white shadow-sm">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">

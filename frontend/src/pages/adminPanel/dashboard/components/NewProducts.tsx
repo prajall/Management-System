@@ -65,7 +65,7 @@ export default function NewProducts() {
                     : product.title}
                 </h3>
               </div>
-              <div className="text-orange-500 font-bold">${product.price}</div>
+              <div className="text-primary font-bold">${product.price}</div>
             </div>
           ))
         )}

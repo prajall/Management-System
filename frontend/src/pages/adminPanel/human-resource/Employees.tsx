@@ -26,12 +26,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 import { RoleProp, UserProp } from "@/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const ManageUsers = () => {
+const Employees = () => {
   const [users, setUsers] = useState<UserProp[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserProp | null>(null);
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
@@ -40,8 +41,11 @@ const ManageUsers = () => {
   const [sortField, setSortField] = useState<string>("role");
   const [sortOrder] = useState<string>("dsc");
   const [roles, setRoles] = useState<RoleProp[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   const fetchUsers = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/user`, {
         params: {
@@ -60,6 +64,8 @@ const ManageUsers = () => {
         toast.error("Failed to fetch users.");
       }
       console.error("Failed to fetch users:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
   const fetchRoles = async () => {
@@ -163,24 +169,46 @@ const ManageUsers = () => {
     fetchRoles();
   }, []);
 
+  const filteredUsers = users?.filter(
+    (user) =>
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.name
+        ? user.name
+        : "" && user.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4">Manage Users</h1>
-      <div className="mb-4 items-center flex gap-2">
-        <p className="text-xs">Sort By</p>
-        <Select
-          value={sortField}
-          onValueChange={(value) => handleSortChange(value)}
-        >
-          <SelectTrigger className="max-w-44">
-            {sortField == "email" ? "Email" : "Role"}
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="role">Role</SelectItem>
-            <SelectItem value="email">Email</SelectItem>
-          </SelectContent>
-        </Select>
+    <div className="">
+      <div className="flex flex-wrap items-center gap-4 mb-4">
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-semibold whitespace-nowrap">Sort By</p>
+          <Select
+            value={sortField}
+            onValueChange={(value) => handleSortChange(value)}
+          >
+            <SelectTrigger className="w-32">
+              {sortField == "email" ? "Email" : "Role"}
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="role">Role</SelectItem>
+              <SelectItem value="email">Email</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex items-center gap-2 flex-grow">
+          <label className="text-sm font-semibold whitespace-nowrap">
+            Search
+          </label>
+          <Input
+            type="text"
+            placeholder="Search by email or name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full max-w-md"
+          />
+        </div>
       </div>
+
       <Table>
         <TableHeader>
           <TableRow>
@@ -190,51 +218,58 @@ const ManageUsers = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map((user) => (
-            <TableRow key={user._id}>
-              <TableCell>{user.email}</TableCell>
-              <TableCell>
-                <Select
-                  value={user.role}
-                  onValueChange={(value) => openRoleChangeDialog(user, value)}
-                >
-                  <SelectTrigger className="w-full border-primary max-w-96 text-primary">
-                    {user.role}
-                    {/* <SelectValue placeholder="Select role" /> */}
-                  </SelectTrigger>
-                  <SelectContent>
-                    {roles.map((role) => (
-                      <SelectItem key={role._id} value={role.name}>
-                        {role.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </TableCell>
-              <TableCell className="flex justify-center">
-                {/* <Button className="bg-primary text-white">Edit</Button> */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <p className="font-semibold text-center">...</p>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      className="text-red-400 text-xs h-6"
-                      onClick={() => {
-                        setSelectedUser(user);
-                        setOpenDeleteDialog(true);
-                      }}
-                    >
-                      Delete User
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+          {isLoading ? (
+            <TableRow>
+              <TableCell colSpan={3} className="text-center">
+                Loading...
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            filteredUsers.map((user) => (
+              <TableRow key={user._id}>
+                <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  <Select
+                    value={user.role}
+                    onValueChange={(value) => openRoleChangeDialog(user, value)}
+                  >
+                    <SelectTrigger className="w-full border-primary max-w-96 text-primary">
+                      {user.role}
+                      {/* <SelectValue placeholder="Select role" /> */}
+                    </SelectTrigger>
+                    <SelectContent>
+                      {roles.map((role) => (
+                        <SelectItem key={role._id} value={role.name}>
+                          {role.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </TableCell>
+                <TableCell className="flex justify-center">
+                  {/* <Button className="bg-primary text-white">Edit</Button> */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <p className="font-semibold text-center">...</p>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        className="text-red-400 text-xs h-6"
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setOpenDeleteDialog(true);
+                        }}
+                      >
+                        Delete User
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
-
       {/* Confirmation Dialog */}
       <Dialog open={openDialog} onOpenChange={setOpenDialog}>
         <DialogContent>
@@ -281,4 +316,4 @@ const ManageUsers = () => {
   );
 };
 
-export default ManageUsers;
+export default Employees;

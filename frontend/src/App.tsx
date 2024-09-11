@@ -4,15 +4,14 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import ManageProducts from "./pages/ManageProducts";
-import ManageUsers from "./pages/ManageUsers";
+import ManageUsers from "./pages/adminPanel/human-resource/Employees";
 import NewProduct from "./pages/NewProduct";
-import RoleManagement from "./pages/RoleManagement";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Setup from "./pages/Setup";
 import ThemeChanger from "./pages/ThemeChanger";
+import RoleManagement from "./pages/adminPanel/human-resource/RoleManagement";
 import MainPage from "./pages/adminPanel/MainPage";
-
 function App() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -75,7 +74,7 @@ function App() {
       <div className="">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/admin" element={<MainPage />} />
+          <Route path="/admin/*" element={<MainPage />} />
           <Route path="/install" element={<Setup />} />
           <Route path="/themes" element={<ThemeChanger />} />
           <Route path="/roles" element={<RoleManagement />} />

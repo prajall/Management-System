@@ -4,12 +4,10 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../components/ui/accordion";
+} from "@/components/ui/accordion";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { RoleProp } from "../types";
-import ModulePermissions from "../components/ModulePermissions";
-import { Button } from "../components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -17,9 +15,11 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogFooter,
-} from "../components/ui/dialog";
-import { Input } from "../components/ui/input";
-import Header from "../components/Header";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import Header from "@/components/Header";
+import { RoleProp } from "@/types";
+import ModulePermissions from "@/components/ModulePermissions";
 
 const RoleManagement = () => {
   const [isFetching, setIsFetching] = useState(false);

@@ -33,7 +33,7 @@ const Charts = () => {
     { category: "Insurance", amount: 1200 },
   ];
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <div className="grid mt-4 grid-cols-1 gap-4 lg:grid-cols-2">
       <Card className="overflow-hidden w-full ">
         <CardHeader>
           <CardTitle className="text-base sm:text-lg lg:text-xl">
