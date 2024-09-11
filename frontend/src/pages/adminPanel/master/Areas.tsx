@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -16,17 +21,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useEffect, useState } from "react";
+
+interface Area {
+  name: string;
+}
 
 interface City {
   name: string;
-  regions: string[];
+  areas: Area[];
 }
 
 interface Country {
@@ -36,10 +39,12 @@ interface Country {
 
 const Areas = () => {
   const [countries, setCountries] = useState<Country[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState<string>("");
-  const [selectedCity, setSelectedCity] = useState<string>("");
-  const [newArea, setNewArea] = useState("");
+  const [selectedArea, setSelectedArea] = useState<Area | null>(null);
+  const [selectedCity, setSelectedCity] = useState<string>("All");
+  const [selectedCountry, setSelectedCountry] = useState<string>("All");
+  const [newAreaName, setNewAreaName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false); // New state for add dialog
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -49,8 +54,13 @@ const Areas = () => {
     }
   }, []);
 
-  const addArea = () => {
-    if (newArea.trim() !== "" && selectedCountry && selectedCity) {
+  const updateArea = () => {
+    if (
+      newAreaName.trim() !== "" &&
+      selectedArea &&
+      selectedCity &&
+      selectedCountry
+    ) {
       const updatedCountries = countries.map((country) => {
         if (country.name === selectedCountry) {
           return {
@@ -59,7 +69,12 @@ const Areas = () => {
               if (city.name === selectedCity) {
                 return {
                   ...city,
-                  regions: [...city.regions, newArea.trim()],
+                  areas: city.areas.map((area) => {
+                    if (area.name === selectedArea.name) {
+                      return { ...area, name: newAreaName.trim() };
+                    }
+                    return area;
+                  }),
                 };
               }
               return city;
@@ -75,108 +90,292 @@ const Areas = () => {
       config.countries = updatedCountries;
       localStorage.setItem("config", JSON.stringify(config));
 
-      setNewArea("");
+      setNewAreaName("");
       setIsDialogOpen(false);
     }
   };
 
-  useEffect(() => {
-    setSelectedCity("");
-  }, [selectedCountry]);
+  const addArea = () => {
+    if (newAreaName.trim() !== "" && selectedCity && selectedCountry) {
+      const updatedCountries = countries.map((country) => {
+        if (country.name === selectedCountry) {
+          return {
+            ...country,
+            cities: country.cities.map((city) => {
+              if (city.name === selectedCity) {
+                return {
+                  ...city,
+                  areas: [...city.areas, { name: newAreaName.trim() }],
+                };
+              }
+              return city;
+            }),
+          };
+        }
+        return country;
+      });
 
-  const selectedCountryData = countries.find(
-    (country) => country.name === selectedCountry
-  );
-  const selectedCityData = selectedCountryData?.cities.find(
-    (city) => city.name === selectedCity
-  );
+      setCountries(updatedCountries);
 
-  const filteredAreas =
-    selectedCityData?.regions.filter((area) =>
-      area.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || [];
+      const config = JSON.parse(localStorage.getItem("config") || "{}");
+      config.countries = updatedCountries;
+      localStorage.setItem("config", JSON.stringify(config));
+
+      setNewAreaName("");
+      setIsAddDialogOpen(false);
+    }
+  };
+
+  const deleteArea = () => {
+    if (selectedArea && selectedCity && selectedCountry) {
+      const updatedCountries = countries.map((country) => {
+        if (country.name === selectedCountry) {
+          return {
+            ...country,
+            cities: country.cities.map((city) => {
+              if (city.name === selectedCity) {
+                return {
+                  ...city,
+                  areas: city.areas.filter(
+                    (area) => area.name !== selectedArea.name
+                  ),
+                };
+              }
+              return city;
+            }),
+          };
+        }
+        return country;
+      });
+
+      setCountries(updatedCountries);
+
+      const config = JSON.parse(localStorage.getItem("config") || "{}");
+      config.countries = updatedCountries;
+      localStorage.setItem("config", JSON.stringify(config));
+
+      setSelectedArea(null);
+      setSelectedCity("");
+      setNewAreaName("");
+      setIsDialogOpen(false);
+    }
+  };
+
+  const filteredAreas = countries
+    .flatMap(
+      (country) =>
+        country.cities?.flatMap(
+          (city) =>
+            city.areas?.map((area) => ({
+              ...area,
+              city: city.name,
+              country: country.name,
+            })) || []
+        ) || []
+    )
+    .filter(
+      (area) =>
+        (selectedCountry === "All" || area.country === selectedCountry) &&
+        (selectedCity === "All" || area.city === selectedCity)
+    )
+    .filter((area) =>
+      area.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+  console.log(JSON.parse(localStorage.getItem("config") || "{}"));
 
   return (
     <div>
-      <div className="mb-4 flex gap-4 flex-col lg:flex-row">
-        <div className="flex gap-4 ">
+      <div className="mb-4 flex flex-col gap-4">
+        <div className="flex gap-2">
           <Select onValueChange={setSelectedCountry} value={selectedCountry}>
-            <SelectTrigger className="w-full min-w-[150px]">
-              <SelectValue placeholder="Select a country" />
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Select Country" />
             </SelectTrigger>
-            <SelectContent>
-              {countries.map((country, index) => (
-                <SelectItem key={index} value={country.name}>
+            <SelectContent className="w-[150px]">
+              <SelectItem value="All">All</SelectItem>
+              {countries.map((country) => (
+                <SelectItem key={country.name} value={country.name}>
                   {country.name}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
           <Select onValueChange={setSelectedCity} value={selectedCity}>
-            <SelectTrigger className="w-full min-w-[150px]">
-              <SelectValue placeholder="Select a city" />
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Select City" />
             </SelectTrigger>
-            <SelectContent>
-              {selectedCountryData?.cities.length === 0 ? (
-                <p className="text-xs text-gray-500 p-2">No Cities</p>
-              ) : (
-                selectedCountryData?.cities.map((city, index) => (
-                  <SelectItem key={index} value={city.name}>
+            <SelectContent className="w-[150px]">
+              <SelectItem value="All">All</SelectItem>
+              {countries
+                .filter(
+                  (country) =>
+                    selectedCountry === "All" ||
+                    country.name === selectedCountry
+                )
+                .flatMap((country) => country.cities)
+                .map((city) => (
+                  <SelectItem key={city.name} value={city.name}>
                     {city.name}
                   </SelectItem>
-                ))
-              )}
+                ))}
             </SelectContent>
           </Select>
-        </div>
-        <Input
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search areas"
-          className="flex-grow"
-        />
-      </div>
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger disabled={!selectedCountry || !selectedCity}>
-          <div className="mb-4">
-            <Button disabled={!selectedCountry || !selectedCity}>
-              Add Area
-            </Button>
-          </div>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              Add New Area to {selectedCity}, {selectedCountry}
-            </DialogTitle>
-          </DialogHeader>
           <Input
-            value={newArea}
-            onChange={(e) => setNewArea(e.target.value)}
-            placeholder="Enter area name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search areas"
+            className="flex-grow"
           />
-          <Button onClick={addArea}>Add</Button>
-        </DialogContent>
-      </Dialog>
-
+        </div>
+        <Button className="w-fit" onClick={() => setIsAddDialogOpen(true)}>
+          Add New Area
+        </Button>{" "}
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
             <TableHead className="w-10">SNo.</TableHead>
-            <TableHead>
-              Areas in {selectedCity}, {selectedCountry}
-            </TableHead>
+            <TableHead>Area</TableHead>
+            <TableHead>City</TableHead>
+            <TableHead>Country</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {filteredAreas.map((area, index) => (
-            <TableRow key={index}>
+            <TableRow
+              key={index}
+              className="cursor-pointer"
+              onClick={() => {
+                setSelectedArea(area);
+                setSelectedCity(area.city);
+                setSelectedCountry(area.country);
+                setNewAreaName(area.name);
+                setIsDialogOpen(true);
+              }}
+            >
               <TableCell className="w-10">{index + 1}</TableCell>
-              <TableCell>{area}</TableCell>
+              <TableCell>{area.name}</TableCell>
+              <TableCell>{area.city}</TableCell>
+              <TableCell>{area.country}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Area</DialogTitle>
+          </DialogHeader>
+          <div className="flex gap-2">
+            <Select onValueChange={setSelectedCountry} value={selectedCountry}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select Country" />
+              </SelectTrigger>
+              <SelectContent className="w-[150px]">
+                {countries.map((country) => (
+                  <SelectItem key={country.name} value={country.name}>
+                    {country.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select onValueChange={setSelectedCity} value={selectedCity}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select City" />
+              </SelectTrigger>
+              <SelectContent className="w-[150px]">
+                {countries
+                  .filter(
+                    (country) =>
+                      selectedCountry === "All" ||
+                      country.name === selectedCountry
+                  )
+                  .flatMap((country) => country.cities)
+                  .map((city) => (
+                    <SelectItem key={city.name} value={city.name}>
+                      {city.name}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+            <Input
+              value={newAreaName}
+              onChange={(e) => setNewAreaName(e.target.value)}
+              placeholder="Enter area name"
+            />
+          </div>
+          <div className="flex ml-auto gap-6">
+            <Button
+              onClick={deleteArea}
+              variant="link"
+              className="p-0 text-red-500"
+            >
+              {/* <Trash size={16} /> */}
+              Delete
+            </Button>
+            <Button onClick={updateArea}>Update</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Area</DialogTitle>
+          </DialogHeader>
+          <div className="flex gap-2">
+            <div className="w-full max-w-[150px]">
+              <Select
+                value={selectedCountry}
+                onValueChange={setSelectedCountry}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select Country" />
+                </SelectTrigger>
+                <SelectContent>
+                  {countries.map((country) => (
+                    <SelectItem key={country.name} value={country.name}>
+                      {country.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-full max-w-[150px]">
+              <Select value={selectedCity} onValueChange={setSelectedCity}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select City" />
+                </SelectTrigger>
+                <SelectContent>
+                  {countries
+                    .filter(
+                      (country) =>
+                        selectedCountry === "All" ||
+                        country.name === selectedCountry
+                    )
+                    .flatMap((country) => country.cities)
+                    .map((city) => (
+                      <SelectItem key={city.name} value={city.name}>
+                        {city.name}
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Input
+              value={newAreaName}
+              onChange={(e) => setNewAreaName(e.target.value)}
+              placeholder="Enter area name"
+            />
+          </div>
+          <Button
+            onClick={addArea}
+            disabled={!newAreaName.trim() || !selectedCity || !selectedCountry}
+          >
+            Add
+          </Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

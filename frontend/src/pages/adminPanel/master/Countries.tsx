@@ -96,12 +96,14 @@ const Countries = () => {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-10">SNo.</TableHead>
             <TableHead>Countries</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {filteredCountries.map((country, index) => (
             <TableRow key={index}>
+              <TableCell className="w-10">{index + 1}</TableCell>
               <TableCell>{country.name}</TableCell>
             </TableRow>
           ))}
