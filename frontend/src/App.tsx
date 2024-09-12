@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-import Navbar from "./components/Navbar";
+// import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import ManageProducts from "./pages/ManageProducts";
@@ -43,17 +43,17 @@ function App() {
     }
   };
 
-  const fetchENV = async () => {
-    try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/env`);
-      if (response.status === 200) {
-        sessionStorage.setItem("ENV", JSON.stringify(response.data));
-      }
-      console.log("ENV files:", response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchENV = async () => {
+  //   try {
+  //     const response = await axios.get(`${import.meta.env.VITE_API_URL}/env`);
+  //     if (response.status === 200) {
+  //       sessionStorage.setItem("ENV", JSON.stringify(response.data));
+  //     }
+  //     console.log("ENV files:", response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     // fetchENV();

@@ -40,12 +40,14 @@ interface Country {
 const Areas = () => {
   const [countries, setCountries] = useState<Country[]>([]);
   const [selectedArea, setSelectedArea] = useState<Area | null>(null);
-  const [selectedCity, setSelectedCity] = useState<string>("All");
-  const [selectedCountry, setSelectedCountry] = useState<string>("All");
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [newAreaName, setNewAreaName] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false); // New state for add dialog
   const [searchTerm, setSearchTerm] = useState("");
+  const [filteringCountry, setFilteringCountry] = useState<string>("All");
+  const [filteringCity, setFilteringCity] = useState<string>("All");
 
   useEffect(() => {
     const config = JSON.parse(localStorage.getItem("config") || "{}");
@@ -80,9 +82,24 @@ const Areas = () => {
               return city;
             }),
           };
+        } else {
+          return {
+            ...country,
+            cities: country.cities.filter((city) => city.name !== selectedCity),
+          };
         }
-        return country;
       });
+
+      const newCountryIndex = updatedCountries.findIndex(
+        (country) => country.name === selectedCountry
+      );
+
+      if (newCountryIndex !== -1) {
+        updatedCountries[newCountryIndex].cities.push({
+          name: newAreaName.trim(),
+          areas: selectedArea ? [selectedArea] : [],
+        });
+      }
 
       setCountries(updatedCountries);
 
@@ -125,6 +142,8 @@ const Areas = () => {
       setIsAddDialogOpen(false);
     }
   };
+
+  console.log(JSON.parse(localStorage.getItem("config") || "{}"));
 
   const deleteArea = () => {
     if (selectedArea && selectedCity && selectedCountry) {
@@ -175,52 +194,67 @@ const Areas = () => {
     )
     .filter(
       (area) =>
-        (selectedCountry === "All" || area.country === selectedCountry) &&
-        (selectedCity === "All" || area.city === selectedCity)
+        (filteringCountry === "All" || area.country === filteringCountry) &&
+        (filteringCity === "All" || area.city === filteringCity)
     )
     .filter((area) =>
       area.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-  console.log(JSON.parse(localStorage.getItem("config") || "{}"));
+  useEffect(() => {
+    setFilteringCity("All");
+  }, [filteringCountry]);
+
+  useEffect(() => {
+    console.log({ selectedCountry, selectedCity });
+  }, [selectedCountry, selectedCity]);
 
   return (
     <div>
       <div className="mb-4 flex flex-col gap-4">
-        <div className="flex gap-2">
-          <Select onValueChange={setSelectedCountry} value={selectedCountry}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select Country" />
-            </SelectTrigger>
-            <SelectContent className="w-[150px]">
-              <SelectItem value="All">All</SelectItem>
-              {countries.map((country) => (
-                <SelectItem key={country.name} value={country.name}>
-                  {country.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select onValueChange={setSelectedCity} value={selectedCity}>
-            <SelectTrigger className="w-[200px]">
-              <SelectValue placeholder="Select City" />
-            </SelectTrigger>
-            <SelectContent className="w-[150px]">
-              <SelectItem value="All">All</SelectItem>
-              {countries
-                .filter(
-                  (country) =>
-                    selectedCountry === "All" ||
-                    country.name === selectedCountry
-                )
-                .flatMap((country) => country.cities)
-                .map((city) => (
-                  <SelectItem key={city.name} value={city.name}>
-                    {city.name}
+        <div className="flex flex-col  gap-2">
+          <div className="flex gap-4 items-center">
+            <label className="text-sm font-medium text-gray-500">
+              Country:
+            </label>
+            <Select
+              onValueChange={setFilteringCountry}
+              value={filteringCountry}
+            >
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select Country" />
+              </SelectTrigger>
+              <SelectContent className="w-[150px]">
+                <SelectItem value="All">All</SelectItem>
+                {countries.map((country) => (
+                  <SelectItem key={country.name} value={country.name}>
+                    {country.name}
                   </SelectItem>
                 ))}
-            </SelectContent>
-          </Select>
+              </SelectContent>
+            </Select>
+            <label className="text-sm font-medium text-gray-500">City:</label>
+            <Select onValueChange={setFilteringCity} value={filteringCity}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Select City" />
+              </SelectTrigger>
+              <SelectContent className="w-[150px]">
+                <SelectItem value="All">All</SelectItem>
+                {countries
+                  .filter(
+                    (country) =>
+                      filteringCountry === "All" ||
+                      country.name === filteringCountry
+                  )
+                  .flatMap((country) => country.cities)
+                  .map((city) => (
+                    <SelectItem key={city.name} value={city.name}>
+                      {city.name}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
           <Input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -228,7 +262,14 @@ const Areas = () => {
             className="flex-grow"
           />
         </div>
-        <Button className="w-fit" onClick={() => setIsAddDialogOpen(true)}>
+        <Button
+          className="w-fit"
+          onClick={() => {
+            setIsAddDialogOpen(true);
+            setSelectedCountry(filteringCountry);
+            setSelectedCity(filteringCity);
+          }}
+        >
           Add New Area
         </Button>{" "}
       </div>
@@ -268,7 +309,10 @@ const Areas = () => {
             <DialogTitle>Edit Area</DialogTitle>
           </DialogHeader>
           <div className="flex gap-2">
-            <Select onValueChange={setSelectedCountry} value={selectedCountry}>
+            <Select
+              onValueChange={setSelectedCountry}
+              value={selectedCountry === "All" ? "" : selectedCountry}
+            >
               <SelectTrigger className="w-[200px]">
                 <SelectValue placeholder="Select Country" />
               </SelectTrigger>

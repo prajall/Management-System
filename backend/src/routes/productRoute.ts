@@ -3,6 +3,7 @@ import {
   createProduct,
   deleteProduct,
   getLatestProducts,
+  searchProductByTitle,
   updateProduct,
   viewAllProducts,
   viewOneProduct,
@@ -22,6 +23,7 @@ Router.put(
 // Router.get("/", checkPermission("Product", "View"), viewAllProducts);
 Router.get("/", viewAllProducts);
 Router.get("/latest", authChecker, adminChecker, getLatestProducts);
+Router.get("/search", searchProductByTitle);
 Router.get("/:productId", checkPermission("Product", "View"), viewOneProduct);
 Router.delete(
   "/:productId",

@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useEffect, useState } from "react";
 
 interface Region {
   name: string;
@@ -46,10 +46,7 @@ const Countries = () => {
 
   const addCountry = () => {
     if (newCountry.trim() !== "") {
-      const updatedCountries = [
-        ...countries,
-        { name: newCountry.trim(), cities: [] },
-      ];
+      const updatedCountries = [...countries, { name: newCountry, cities: [] }];
       setCountries(updatedCountries);
 
       const config = JSON.parse(localStorage.getItem("config") || "{}");

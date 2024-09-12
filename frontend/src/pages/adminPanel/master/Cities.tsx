@@ -103,14 +103,14 @@ const Cities = () => {
             ...country,
             cities: [
               ...country.cities,
-              { name: newCityName.trim(), regions: [] },
+              { name: newCityName.trim(), areas: [] },
             ],
           };
         }
         return country;
       });
 
-      setCountries(updatedCountries);
+      setCountries(updatedCountries as Country[]);
 
       const config = JSON.parse(localStorage.getItem("config") || "{}");
       config.countries = updatedCountries;

@@ -91,10 +91,89 @@ export const updateProduct = async (req: Request, res: Response) => {
 };
 
 export const viewAllProducts = async (req: Request, res: Response) => {
-  try {
-    const products = await Product.find();
+  const { page = 1, limit = 15, sort, searchQuery } = req.query;
 
-    return res.status(200).json(products);
+  if (isNaN(Number(page)) || Number(page) <= 0) {
+    return res.status(400).json({ message: "Invalid page number" });
+  }
+
+  if (isNaN(Number(limit)) || Number(limit) <= 0) {
+    return res.status(400).json({ message: "Invalid limit number" });
+  }
+
+  try {
+    let sortOptions = {};
+    if (sort === "price01") {
+      sortOptions = { price: 1 };
+    } else if (sort === "price10") {
+      sortOptions = { price: -1 };
+    } else if (sort === "rating") {
+      sortOptions = { rating: -1 };
+    } else {
+      sortOptions = { title: 1 };
+    }
+
+    let products = [];
+
+    if (searchQuery) {
+      products = await Product.find({
+        title: { $regex: searchQuery, $options: "i" },
+      })
+        .skip((Number(page) - 1) * Number(limit))
+        .limit(Number(limit))
+        .sort(sortOptions);
+    } else {
+      products = await Product.find()
+        .skip((Number(page) - 1) * Number(limit))
+        .limit(Number(limit))
+        .sort(sortOptions);
+    }
+
+    const totalProducts = searchQuery
+      ? await Product.countDocuments({
+          title: { $regex: searchQuery, $options: "i" },
+        })
+      : await Product.countDocuments();
+
+    return res.status(200).json({
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / Number(limit)),
+      currentPage: Number(page),
+      products,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
+
+export const searchResults = async (req: Request, res: Response) => {
+  const { searchQuery, page = 1, limit = 15 } = req.query;
+
+  if (isNaN(Number(page)) || Number(page) <= 0) {
+    return res.status(400).json({ message: "Invalid page number" });
+  }
+
+  if (isNaN(Number(limit)) || Number(limit) <= 0) {
+    return res.status(400).json({ message: "Invalid limit number" });
+  }
+
+  try {
+    const products = await Product.find({
+      title: { $regex: searchQuery, $options: "i" },
+    })
+      .skip((Number(page) - 1) * Number(limit))
+      .limit(Number(limit));
+
+    const totalProducts = await Product.countDocuments({
+      title: { $regex: searchQuery, $options: "i" },
+    });
+
+    return res.status(200).json({
+      totalProducts,
+      totalPages: Math.ceil(totalProducts / Number(limit)),
+      currentPage: Number(page),
+      products,
+    });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error", error });
   }
@@ -146,6 +225,28 @@ export const getLatestProducts = async (req: Request, res: Response) => {
     console.log(latestProducts);
 
     return res.status(200).json(latestProducts);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
+
+export const searchProductByTitle = async (req: Request, res: Response) => {
+  const { searchQuery } = req.query;
+
+  if (!searchQuery) {
+    return res.status(400).json({ message: "Search query is required" });
+  }
+
+  try {
+    const products = await Product.find({
+      title: { $regex: searchQuery, $options: "i" },
+    });
+
+    if (!products || products.length === 0) {
+      return res.status(404).json({ message: "No products found" });
+    }
+
+    return res.status(200).json(products);
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error", error });
   }

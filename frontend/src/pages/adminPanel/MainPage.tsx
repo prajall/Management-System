@@ -10,6 +10,7 @@ import RoleManagement from "./human-resource/RoleManagement";
 import Countries from "./master/Countries";
 import Cities from "./master/Cities";
 import Areas from "./master/Areas";
+import Products from "./products/Products";
 
 const MainPage = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -56,6 +57,7 @@ const MainPage = () => {
             <Route path="/countries" element={<Countries />} />
             <Route path="/cities" element={<Cities />} />
             <Route path="/areas" element={<Areas />} />
+            <Route path="/products" element={<Products />} />
           </Routes>
         </div>
       </div>
