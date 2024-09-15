@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/pagination";
 import { useEffect, useState } from "react";
 import { Product } from "@/types";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
