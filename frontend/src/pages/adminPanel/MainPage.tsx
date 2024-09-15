@@ -1,25 +1,28 @@
-import { useState } from "react";
-import Sidebar from "@/pages/adminPanel/components/Sidebar";
-import { Route, Routes } from "react-router-dom";
-import Dashboard from "./dashboard/Dashboard";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Sidebar from "@/pages/adminPanel/components/Sidebar";
 import { Menu } from "lucide-react";
-import ManageUsers from "./human-resource/Employees";
+import React, { useState } from "react";
+import { Route, Routes } from "react-router-dom";
 import Settings from "./administration/Settings";
+import Dashboard from "./dashboard/Dashboard";
+import ManageUsers from "./human-resource/Employees";
 import RoleManagement from "./human-resource/RoleManagement";
-import Countries from "./master/Countries";
-import Cities from "./master/Cities";
 import Areas from "./master/Areas";
-import Products from "./products/Products";
+import Cities from "./master/Cities";
+import Countries from "./master/Countries";
+import NewProducts from "./products/NewProducts";
+import ProductsPage from "./products/ProductsPage";
 
 const MainPage = () => {
+  console.log("MainPage");
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [pageTitle, setPageTitle] = useState("Dashboard");
 
   return (
-    <div className="flex h-screen">
+    <div className="flex">
       {/* Sidebar for desktop */}
-      <div className="hidden md:block md:fixed w-56 xl:w-60 overflow-auto">
+      <div className="hidden md:block md:fixed  left-0 top-0 w-56 xl:w-60 bg-white">
         <Sidebar
           setPageTitle={setPageTitle}
           closeSidebar={() => setIsSidebarOpen(false)}
@@ -27,7 +30,7 @@ const MainPage = () => {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 md:ml-56 xl:ml-60  overflow-auto">
+      <div className="flex-1 md:ml-56 xl:ml-60 flex flex-col">
         <header className="fixed top-0 z-50 left-0 md:left-56 xl:left-60 w-full bg-primary shadow-sm flex items-center">
           <div className="md:hidden">
             <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
@@ -48,7 +51,7 @@ const MainPage = () => {
             {pageTitle}
           </h1>
         </header>
-        <div className="mt-16 p-4">
+        <div className="mt-16 w-full overflow-hidden p-4">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/employees" element={<ManageUsers />} />
@@ -57,7 +60,8 @@ const MainPage = () => {
             <Route path="/countries" element={<Countries />} />
             <Route path="/cities" element={<Cities />} />
             <Route path="/areas" element={<Areas />} />
-            <Route path="/products" element={<Products />} />
+            <Route path="/products/*" element={<ProductsPage />} />
+            <Route path="/products/new" element={<NewProducts />} />
           </Routes>
         </div>
       </div>
@@ -65,4 +69,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default React.memo(MainPage);

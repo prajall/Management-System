@@ -28,7 +28,7 @@ createRoot(document.getElementById("root")!).render(
       />
       <ThemeProvider>
         <AppProvider>
-          <div className="roboto-regular ">
+          <div className="roboto-regular">
             <App />
           </div>
         </AppProvider>

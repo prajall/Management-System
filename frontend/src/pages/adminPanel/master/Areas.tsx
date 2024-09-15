@@ -370,7 +370,7 @@ const Areas = () => {
           <div className="flex gap-2">
             <div className="w-full max-w-[150px]">
               <Select
-                value={selectedCountry}
+                value={selectedCountry == "All" ? "" : selectedCountry}
                 onValueChange={setSelectedCountry}
               >
                 <SelectTrigger>
@@ -386,7 +386,10 @@ const Areas = () => {
               </Select>
             </div>
             <div className="w-full max-w-[150px]">
-              <Select value={selectedCity} onValueChange={setSelectedCity}>
+              <Select
+                value={selectedCity == "All" ? "" : selectedCity}
+                onValueChange={setSelectedCity}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select City" />
                 </SelectTrigger>

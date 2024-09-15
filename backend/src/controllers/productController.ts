@@ -9,29 +9,37 @@ const upload = multer({ storage });
 
 export const createProduct = async (req: Request, res: Response) => {
   try {
-    const { title, description, price, category } = req.body;
+    const { title, description, basePrice, category } = req.body;
+    console.log("req.body", req.body);
+    // console.log(title, description, basePrice, category);
 
-    console.log(title, description, price, category);
-
-    if (!title || !description || !price || !category) {
+    if (!title || !description || !basePrice || !category) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    // let imageUrl = "";
-    // if (req.file) {
-    //   const cloudinaryResult: any = await uploadOnCloudinary(
-    //     req.file.buffer,
-    //     "products"
-    //   );
-    //   imageUrl = cloudinaryResult.url;
-    // }
+    const images = req.files as Express.Multer.File[];
+    if (!images || images.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "At least one image is required" });
+    }
+
+    const imageUrls = await Promise.all(
+      images.map(async (image) => {
+        const cloudinaryResult: any = await uploadOnCloudinary(
+          image.buffer,
+          "products"
+        );
+        return cloudinaryResult.url;
+      })
+    );
 
     const newProduct = new Product({
       title,
       description,
-      price,
+      basePrice,
       category,
-      // image: imageUrl,
+      images: imageUrls,
     });
 
     await newProduct.save();

@@ -10,16 +10,20 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  price: {
+  basePrice: {
     type: Number,
     required: true,
   },
   category: {
     type: String,
   },
-  image: {
-    type: String,
+  images: {
+    type: [String],
     required: true,
+  },
+  discountPercentage: {
+    type: Number,
+    default: 0,
   },
   rating: {
     type: {
