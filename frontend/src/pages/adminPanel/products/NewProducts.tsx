@@ -14,6 +14,14 @@ import { Image, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+  DroppableProvided,
+  DraggableProvided,
+} from "react-beautiful-dnd";
 
 const NewProducts = () => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -90,11 +98,21 @@ const NewProducts = () => {
     setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
+  const onDragEnd = (result: DropResult) => {
+    console.log("draggable result", result);
+    if (!result.destination) return;
+
+    const reorderedImages = Array.from(selectedImages);
+    const [removed] = reorderedImages.splice(result.source.index, 1);
+    reorderedImages.splice(result.destination.index, 0, removed);
+
+    setSelectedImages(reorderedImages);
+  };
+
   useEffect(() => {
     console.log("selectedImages", selectedImages);
     setValue("images", selectedImages);
     if (selectedImages.length > 0) {
-      console.log("inside if in useeffe");
       clearErrors("images");
     }
     console.log("watch images", watch("images"));
@@ -154,27 +172,59 @@ const NewProducts = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 ">
-              {selectedImages.map((image, index) => (
-                <div
-                  key={index}
-                  className="relative max-w-1/2 lg:max-w-1/4 group "
-                >
-                  <img
-                    src={URL.createObjectURL(image)}
-                    alt={`Product ${index + 1}`}
-                    className="w-full aspect-square object-cover rounded"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveImage(index)}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center p-1"
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable droppableId="imagdsdes" direction="horizontal">
+                {(provided: DroppableProvided) => (
+                  <div
+                    className="grid grid-cols-2 lg:grid-cols-4 gap-4"
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
                   >
-                    <X size={12} />
-                  </button>
-                </div>
-              ))}
-            </div>
+                    {selectedImages.map((image, index) => (
+                      <Draggable
+                        key={index}
+                        draggableId={index.toString()}
+                        index={index}
+                      >
+                        {(provided: DraggableProvided) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            className="relative max-w-1/2 lg:max-w-1/4 group"
+                          >
+                            <img
+                              src={URL.createObjectURL(image)}
+                              alt={`Product ${index + 1}`}
+                              className={`w-full aspect-square object-cover rounded `}
+                            />
+                            {index === 0 && (
+                              <div className="absolute top-2 left-2 bg-white/70 backdrop-blur-sm rounded p-1 px-2">
+                                <p
+                                  title="This image will be used as the main image of the product"
+                                  className="text-xs font-semibold"
+                                >
+                                  Base Image
+                                </p>
+                              </div>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveImage(index)}
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center p-1"
+                            >
+                              <X size={12} />
+                            </button>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+
             <Input
               type="file"
               accept="image/*"

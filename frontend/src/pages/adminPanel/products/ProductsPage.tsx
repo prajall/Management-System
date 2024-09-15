@@ -11,7 +11,7 @@ import { checkPermission } from "@/lib/utils";
 import React, { useCallback, useContext, useState } from "react";
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Products from "./Products";
+import Products from "./components/Products";
 import SearchResults from "./SearchResults";
 import SearchForm from "./components/SearchForm";
 

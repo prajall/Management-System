@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import ManageProducts from "./pages/ManageProducts";
 import ManageUsers from "./pages/adminPanel/human-resource/Employees";
-import NewProduct from "./pages/NewProduct";
+// import NewProduct from "./pages/NewProduct";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Setup from "./pages/Setup";
@@ -82,9 +82,9 @@ function App() {
           <Route path="/manage-users" element={<ManageUsers />} />
 
           <Route path="/manage-products" element={<ManageProducts />} />
-          <Route path="/manage-products/new" element={<NewProduct />} />
-          <Route path="/manage-products/:id" element={<NewProduct />} />
-          <Route path="/manage-products/:id/edit" element={<NewProduct />} />
+          {/* <Route path="/manage-products/new" element={<NewProduct />} />
+          <Route path="/manage-products/:id" element={<NewProduct />} /> */}
+          {/* <Route path="/manage-products/:id/edit" element={<NewProduct />} /> */}
         </Routes>
       </div>
     </>
