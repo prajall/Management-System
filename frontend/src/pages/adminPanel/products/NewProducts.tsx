@@ -10,21 +10,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
-import { Image, X } from "lucide-react";
+import { Image, Loader2, X } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-  DroppableProvided,
-  DraggableProvided,
-} from "react-beautiful-dnd";
 
 const NewProducts = () => {
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [variations, setVariations] = useState<string[]>([]);
+  const [variationInput, setVariationInput] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const {
     register,
@@ -37,7 +32,7 @@ const NewProducts = () => {
   } = useForm();
 
   const onSubmit: SubmitHandler<any> = async (data) => {
-    console.log("data", data);
+    setIsSubmitting(true);
 
     if (selectedImages.length <= 0) {
       setError("images", {
@@ -48,14 +43,17 @@ const NewProducts = () => {
 
     try {
       const formData = new FormData();
-      console.log("Title:", data.title);
-      console.log("Description:", data.description);
-      console.log("Base Price:", data.basePrice);
-      console.log("Selected Images:", selectedImages);
 
       formData.append("title", data.title);
       formData.append("description", data.description);
       formData.append("basePrice", data.basePrice.toString());
+      formData.append("stock", data.stock.toString());
+      formData.append("brand", data.brand);
+      formData.append("discountAmount", data.discountAmount.toString());
+
+      variations.forEach((variation: string) => {
+        formData.append("variations", variation);
+      });
 
       selectedImages.forEach((image) => {
         formData.append("images", image);
@@ -65,12 +63,6 @@ const NewProducts = () => {
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/product`,
-        // {
-        //   title: data.title,
-        //   description: data.description,
-        //   basePrice: data.basePrice,
-        //   // images: selectedImages,
-        // },
         formData,
         {
           headers: {
@@ -86,6 +78,8 @@ const NewProducts = () => {
     } catch (error: any) {
       console.log(error);
       toast.error(error.response?.data?.message || "Error adding product");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -102,17 +96,6 @@ const NewProducts = () => {
 
   const handleRemoveImage = (index: number) => {
     setSelectedImages((prevImages) => prevImages.filter((_, i) => i !== index));
-  };
-
-  const onDragEnd = (result: DropResult) => {
-    console.log("draggable result", result);
-    if (!result.destination) return;
-
-    const reorderedImages = Array.from(selectedImages);
-    const [removed] = reorderedImages.splice(result.source.index, 1);
-    reorderedImages.splice(result.destination.index, 0, removed);
-
-    setSelectedImages(reorderedImages);
   };
 
   useEffect(() => {
@@ -167,6 +150,94 @@ const NewProducts = () => {
                 </p>
               )}
             </div>
+            <div>
+              <Label htmlFor="stock">Stock</Label>
+              <Input
+                {...register("stock", {
+                  required: "Stock is required",
+                })}
+                className="mt-1"
+                id="stock"
+                type="number"
+                placeholder="Enter stock quantity"
+              />
+              {errors.stock && (
+                <p className="text-red-500">
+                  {errors.stock.message?.toString()}
+                </p>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="brand">Brand/Manufacturer</Label>
+              <Input
+                {...register("brand", {
+                  required: "Brand/Manufacturer is required",
+                })}
+                className="mt-1"
+                id="brand"
+                placeholder="Enter brand or manufacturer"
+              />
+              {errors.brand && (
+                <p className="text-red-500">
+                  {errors.brand.message?.toString()}
+                </p>
+              )}
+            </div>
+            <div>
+              <Label htmlFor="variations">
+                Variations{" "}
+                <span className="text-muted-foreground text-xs">
+                  (optional)
+                </span>
+              </Label>
+              {variations.length > 0 && (
+                <div className="flex gap-2 my-2 flex-wrap">
+                  {variations.map((variation, index) => (
+                    <div
+                      className="flex items-center gap-1 bg-gray-200 px-2 pl-3 py-1 rounded-full "
+                      key={index}
+                    >
+                      <p className="text-sm">{variation}</p>
+                      <button
+                        type="button"
+                        className="p-1"
+                        onClick={() =>
+                          setVariations(
+                            variations.filter((_, i) => i !== index)
+                          )
+                        }
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="flex gap-2 mt-1">
+                <Input
+                  {...register("variations")}
+                  id="variations"
+                  placeholder="Enter product variations: Size/Colour/Material etc."
+                  value={variationInput}
+                  onChange={(e) => setVariationInput(e.target.value)}
+                />
+                <Button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setVariations([...variations, variationInput]);
+                    setVariationInput("");
+                  }}
+                >
+                  Add Variation
+                </Button>
+              </div>
+              {errors.variations && (
+                <p className="text-red-500">
+                  {errors.variations.message?.toString()}
+                </p>
+              )}
+            </div>
           </CardContent>
         </Card>
 
@@ -178,58 +249,37 @@ const NewProducts = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="imageds" direction="horizontal">
-                {(provided: DroppableProvided) => (
-                  <div
-                    className="grid grid-cols-2 lg:grid-cols-4 gap-4"
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {selectedImages.map((image, index) => (
-                      <Draggable
-                        key={index}
-                        draggableId={index.toString()}
-                        index={index}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {selectedImages.map((image, index) => (
+                <div
+                  key={index}
+                  className="relative max-w-1/2 lg:max-w-1/4 group"
+                >
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`Product ${index + 1}`}
+                    className={`w-full aspect-square object-cover rounded `}
+                  />
+                  {index === 0 && (
+                    <div className="absolute top-2 left-2 bg-white/70 backdrop-blur-sm rounded p-1 px-2">
+                      <p
+                        title="This image will be used as the main image of the product"
+                        className="text-xs font-semibold"
                       >
-                        {(provided: DraggableProvided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className="relative max-w-1/2 lg:max-w-1/4 group"
-                          >
-                            <img
-                              src={URL.createObjectURL(image)}
-                              alt={`Product ${index + 1}`}
-                              className={`w-full aspect-square object-cover rounded `}
-                            />
-                            {index === 0 && (
-                              <div className="absolute top-2 left-2 bg-white/70 backdrop-blur-sm rounded p-1 px-2">
-                                <p
-                                  title="This image will be used as the main image of the product"
-                                  className="text-xs font-semibold"
-                                >
-                                  Base Image
-                                </p>
-                              </div>
-                            )}
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveImage(index)}
-                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center p-1"
-                            >
-                              <X size={12} />
-                            </button>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+                        Base Image
+                      </p>
+                    </div>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(index)}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center p-1"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              ))}
+            </div>
 
             <Input
               type="file"
@@ -287,94 +337,28 @@ const NewProducts = () => {
               )}
             </div>
             <div className="w-1/2">
-              <Label htmlFor="discountPercentage">
-                Discount Percentage (%){" "}
+              <Label htmlFor="discountAmount">
+                Discount Amount ($){" "}
                 <span className="text-muted-foreground text-xs">
                   (optional)
                 </span>
               </Label>
 
               <Input
-                {...register("discountPercentage")}
+                {...register("discountAmount")}
                 className="mt-1 w-full"
-                id="discountPercentage"
+                id="discountAmount"
                 type="number"
-                placeholder="Enter discount percentage"
+                placeholder="Enter discount amount"
               />
-              {errors.discountPercentage && (
+              {errors.discountAmount && (
                 <p className="text-red-500">
-                  {errors.discountPercentage.message?.toString()}
+                  {errors.discountAmount.message?.toString()}
                 </p>
               )}
             </div>
           </CardContent>
         </Card>
-
-        {/* <Card>
-          <CardHeader>
-            <CardTitle>Category</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="productCategory">Product Category</Label>
-              <Controller
-                name="productCategory"
-                control={control}
-                rules={{ required: "Product Category is required" }}
-                render={({ field }) => (
-                  <Select {...field}>
-                    <SelectTrigger id="productCategory" className="mt-1">
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="electronics">Electronics</SelectItem>
-                      <SelectItem value="clothing">Clothing</SelectItem>
-                      <SelectItem value="books">Books</SelectItem>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              {errors.productCategory && (
-                <p className="text-red-500">
-                  {errors.productCategory.message?.toString()}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label>Product Tags</Label>
-              <Controller
-                name="productTags"
-                control={control}
-                rules={{ required: "Product Tags are required" }}
-                render={({ field }) => (
-                  <RadioGroup
-                    {...field}
-                    defaultValue="option-one"
-                    className="mt-1"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="option-one" id="option-one" />
-                      <Label htmlFor="option-one">Clothing</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="option-two" id="option-two" />
-                      <Label htmlFor="option-two">Toys</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="option-three" id="option-three" />
-                      <Label htmlFor="option-three">Internet Of Things</Label>
-                    </div>
-                  </RadioGroup>
-                )}
-              />
-              {errors.productTags && (
-                <p className="text-red-500">
-                  {errors.productTags.message?.toString()}
-                </p>
-              )}
-            </div>
-          </CardContent>
-        </Card> */}
 
         <Button
           type="submit"
@@ -386,8 +370,10 @@ const NewProducts = () => {
               return;
             }
           }}
-          className="bg-primary hover:bg-secondary"
+          disabled={isSubmitting}
+          className="bg-primary w-full hover:bg-secondary flex items-center justify-center gap-1"
         >
+          {isSubmitting && <Loader2 className="mr-2 animate-spin" size={16} />}
           Add Product
         </Button>
       </form>

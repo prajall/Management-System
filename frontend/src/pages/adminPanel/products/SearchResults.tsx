@@ -115,7 +115,7 @@ const SearchResults = ({ sortField }: { sortField: string }) => {
                     <TableCell className="w-10">{index + 1}</TableCell>
                     <TableCell>
                       <img
-                        src={product.image}
+                        src={product.images[0]}
                         alt={product.title}
                         className="w-10 h-10 object-cover"
                       />
@@ -123,7 +123,7 @@ const SearchResults = ({ sortField }: { sortField: string }) => {
                     <TableCell className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
                       {product.title}
                     </TableCell>
-                    <TableCell>${product.price.toFixed(2)}</TableCell>
+                    <TableCell>${product.basePrice.toFixed(2)}</TableCell>
                     <TableCell>{product.category}</TableCell>
                     <TableCell>{product.rating.rate.toFixed(1)}</TableCell>
                   </TableRow>
@@ -136,14 +136,14 @@ const SearchResults = ({ sortField }: { sortField: string }) => {
 
       <Pagination className="mt-2">
         <PaginationContent>
-          {currentPage > 1 && (
-            <PaginationItem>
+          <PaginationItem>
+            {currentPage > 1 && (
               <PaginationPrevious
                 onClick={() => handlePageChange(currentPage - 1)}
                 className="cursor-pointer"
               />
-            </PaginationItem>
-          )}
+            )}
+          </PaginationItem>
           {[...Array(totalPages)].map((_, i) => (
             <PaginationItem key={i + 1}>
               <PaginationLink

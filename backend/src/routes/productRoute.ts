@@ -10,11 +10,17 @@ import {
 } from "../controllers/productController";
 import { authChecker } from "../middlewares/authChecker";
 import { adminChecker, checkPermission } from "../middlewares/checkPermission";
-import { upload } from "../index";
+import { upload } from "../cloudinary";
 
 const Router = express.Router();
 
-Router.post("/", authChecker, checkPermission("Product", "Add"), createProduct);
+Router.post(
+  "/",
+  authChecker,
+  checkPermission("Product", "Add"),
+  upload.array("images"),
+  createProduct
+);
 Router.put(
   "/:productId",
   authChecker,
@@ -32,5 +38,6 @@ Router.delete(
   checkPermission("Product", "Delete"),
   deleteProduct
 );
+Router.post("/create", upload.array("images"), createProduct);
 
 export default Router;

@@ -1,20 +1,24 @@
 import { Request, Response } from "express";
 import { Product } from "../models/productModel";
-import { uploadOnCloudinary } from "../cloudinary";
-
-import multer from "multer";
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
 
 export const createProduct = async (req: Request, res: Response) => {
   console.log("Create Product called");
+  const user = req.user;
   try {
-    const { title, description, basePrice, category, images } = req.body;
-    console.log("req.files", req.files);
-    console.log("req.body", req.body);
+    const {
+      title,
+      description,
+      basePrice,
+      discountAmount,
+      brand,
+      stock,
+      variations,
+    } = req.body;
+    const images = req.files as Express.Multer.File[];
 
-    if (!title || !description || !basePrice) {
+    if (!title || !description || !basePrice || !brand || !stock) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -24,33 +28,52 @@ export const createProduct = async (req: Request, res: Response) => {
         .json({ message: "At least one image is required" });
     }
 
-    const imageUrls = await Promise.all(
-      images.map(async (image: any) => {
-        console.log("image", image);
-        const cloudinaryResult: any = await uploadOnCloudinary(
-          image.buffer,
-          "products"
-        );
-        console.log("cloudinaryResult", cloudinaryResult);
-        return cloudinaryResult.url;
-      })
-    );
+    let imageUrls: string[] = [];
+
+    for (const image of images) {
+      console.log("image", image);
+      const cloudinaryResult = await cloudinary.uploader.upload(image.path, {
+        folder: "products",
+      });
+      console.log("cloudinaryResult", cloudinaryResult);
+      imageUrls.push(cloudinaryResult.secure_url);
+      fs.unlinkSync(image.path);
+    }
+
+    console.log("imageUrls", imageUrls);
 
     const newProduct = new Product({
       title,
       description,
       basePrice,
-      category,
+      discountAmount,
+      brand,
+      stock,
+      variations,
+      rating: {
+        rate: 0,
+        count: 0,
+      },
+      user: user._id,
       images: imageUrls,
     });
 
     await newProduct.save();
 
     return res.status(201).json(newProduct);
-  } catch (error) {
+  } catch (error: any) {
     console.log(error);
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ message: error.message, error });
+    }
     return res.status(500).json({ message: "Internal Server Error" });
   }
+};
+
+export const newProduct = async (req: Request, res: Response) => {
+  console.log("req.files", req.files);
+  console.log("req.body", req.body);
+  res.send("Create products");
 };
 
 // export const createProduct = async (req: Request, res: Response) => {

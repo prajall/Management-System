@@ -32,9 +32,14 @@ export interface Product {
   _id: string;
   title: string;
   description: string;
-  price: number;
-  category: string;
-  image: string;
+  basePrice: number;
+  category?: string;
+  images: string[];
+  user: string;
+  discountAmount?: number;
+  variations?: string[];
+  stock: number;
+  brand: string;
   rating: {
     rate: number;
     count: number;

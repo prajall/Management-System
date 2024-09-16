@@ -104,7 +104,7 @@ const Products = ({ sortField }: { sortField: string }) => {
                   <TableCell className="w-10">{index + 1}</TableCell>
                   <TableCell>
                     <img
-                      src={product.image}
+                      src={product.images[0]}
                       alt={product.title}
                       className="w-10 h-10 object-cover"
                     />
@@ -112,9 +112,11 @@ const Products = ({ sortField }: { sortField: string }) => {
                   <TableCell className="max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap">
                     {product.title}
                   </TableCell>
-                  <TableCell>${product.price.toFixed(2)}</TableCell>
+                  <TableCell>${product.basePrice}</TableCell>
                   <TableCell>{product.category}</TableCell>
-                  <TableCell>{product.rating.rate.toFixed(1)}</TableCell>
+                  {product.rating && (
+                    <TableCell>{product.rating.rate.toFixed(1)}</TableCell>
+                  )}
                 </TableRow>
               ))
             )}
