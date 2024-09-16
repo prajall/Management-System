@@ -65,6 +65,12 @@ const NewProducts = () => {
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/product`,
+        // {
+        //   title: data.title,
+        //   description: data.description,
+        //   basePrice: data.basePrice,
+        //   // images: selectedImages,
+        // },
         formData,
         {
           headers: {
@@ -74,7 +80,7 @@ const NewProducts = () => {
         }
       );
       console.log("response", response);
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success("Product added successfully");
       }
     } catch (error: any) {
@@ -173,7 +179,7 @@ const NewProducts = () => {
           </CardHeader>
           <CardContent>
             <DragDropContext onDragEnd={onDragEnd}>
-              <Droppable droppableId="imagdsdes" direction="horizontal">
+              <Droppable droppableId="imageds" direction="horizontal">
                 {(provided: DroppableProvided) => (
                   <div
                     className="grid grid-cols-2 lg:grid-cols-4 gap-4"

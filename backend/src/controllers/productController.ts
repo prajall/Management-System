@@ -8,16 +8,16 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 export const createProduct = async (req: Request, res: Response) => {
+  console.log("Create Product called");
   try {
-    const { title, description, basePrice, category } = req.body;
+    const { title, description, basePrice, category, images } = req.body;
+    console.log("req.files", req.files);
     console.log("req.body", req.body);
-    // console.log(title, description, basePrice, category);
 
-    if (!title || !description || !basePrice || !category) {
+    if (!title || !description || !basePrice) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    const images = req.files as Express.Multer.File[];
     if (!images || images.length === 0) {
       return res
         .status(400)
@@ -25,11 +25,13 @@ export const createProduct = async (req: Request, res: Response) => {
     }
 
     const imageUrls = await Promise.all(
-      images.map(async (image) => {
+      images.map(async (image: any) => {
+        console.log("image", image);
         const cloudinaryResult: any = await uploadOnCloudinary(
           image.buffer,
           "products"
         );
+        console.log("cloudinaryResult", cloudinaryResult);
         return cloudinaryResult.url;
       })
     );

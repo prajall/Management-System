@@ -10,6 +10,7 @@ import {
 } from "../controllers/productController";
 import { authChecker } from "../middlewares/authChecker";
 import { adminChecker, checkPermission } from "../middlewares/checkPermission";
+import { upload } from "../index";
 
 const Router = express.Router();
 
