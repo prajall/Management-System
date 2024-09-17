@@ -10,11 +10,22 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import { Button } from "./ui/button";
 
 const ModulePermissions = ({ role }: { role: RoleProp }) => {
   const modules = ["Customer", "Product", "Orders", "Billing", "User"];
   const actions = ["View", "Add", "Edit", "Delete"];
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [updatedRole, setUpdatedRole] = useState({ ...role });
 
@@ -142,13 +153,38 @@ const ModulePermissions = ({ role }: { role: RoleProp }) => {
         </TableBody>
       </Table>
       <div className="flex gap-2">
-        <Button
-          onClick={deleteRole}
-          variant={"link"}
-          className=" text-red-600 px-6"
-        >
-          Delete
-        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button
+              variant={"link"}
+              className=" text-red-600 px-6"
+              onClick={() => setIsDialogOpen(true)}
+            >
+              Delete
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Delete Role: "{role.name}"?</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              Are you sure you want to delete this role?
+            </DialogDescription>
+
+            <DialogFooter>
+              <Button
+                variant={"outline"}
+                onClick={() => setIsDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant={"destructive"} onClick={deleteRole}>
+                Delete
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
         <Button
           onClick={updateRole}
           className="border bg-primary hover:bg-secondary border-primary text-white px-6"

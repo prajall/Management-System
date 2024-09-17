@@ -21,17 +21,23 @@ Router.post(
   upload.array("images"),
   createProduct
 );
-Router.put(
+Router.patch(
   "/:productId",
   authChecker,
   checkPermission("product", "update"),
+  upload.array("images"),
   updateProduct
 );
 // Router.get("/", checkPermission("Product", "View"), viewAllProducts);
 Router.get("/", viewAllProducts);
 Router.get("/latest", authChecker, adminChecker, getLatestProducts);
 Router.get("/search", searchProductByTitle);
-Router.get("/:productId", checkPermission("Product", "View"), viewOneProduct);
+Router.get(
+  "/:productId",
+  authChecker,
+  checkPermission("Product", "View"),
+  viewOneProduct
+);
 Router.delete(
   "/:productId",
   authChecker,

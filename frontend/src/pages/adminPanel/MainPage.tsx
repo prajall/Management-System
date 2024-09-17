@@ -10,8 +10,9 @@ import RoleManagement from "./human-resource/RoleManagement";
 import Areas from "./master/Areas";
 import Cities from "./master/Cities";
 import Countries from "./master/Countries";
-import NewProducts from "./products/NewProducts";
+import NewProduct from "./products/NewProduct";
 import ProductsPage from "./products/ProductsPage";
+import EditProduct from "./products/EditProduct";
 
 const MainPage = () => {
   console.log("MainPage");
@@ -61,7 +62,8 @@ const MainPage = () => {
             <Route path="/cities" element={<Cities />} />
             <Route path="/areas" element={<Areas />} />
             <Route path="/products/*" element={<ProductsPage />} />
-            <Route path="/products/new" element={<NewProducts />} />
+            <Route path="/products/new" element={<NewProduct />} />
+            <Route path="/products/edit/:productId" element={<EditProduct />} />
           </Routes>
         </div>
       </div>

@@ -80,7 +80,7 @@ export const deleteRole = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Role not found" });
     }
 
-    if (role.name === "Admin" || user.role === "Master") {
+    if (role.name === "Admin" || role.name === "Master") {
       return res
         .status(403)
         .json({ message: "Cannot Delete Admin and Master roles" });

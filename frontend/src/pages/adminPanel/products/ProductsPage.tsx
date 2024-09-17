@@ -8,12 +8,13 @@ import {
 } from "@/components/ui/select";
 import { AppContext } from "@/contexts/Appcontext";
 import { checkPermission } from "@/lib/utils";
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Products from "./components/Products";
 import SearchResults from "./SearchResults";
 import SearchForm from "./components/SearchForm";
+import NewProduct from "./NewProduct";
 
 const ProductsPage = React.memo(() => {
   console.log("ProductsPage");
@@ -34,11 +35,15 @@ const ProductsPage = React.memo(() => {
         return;
       }
       navigate(
-        `/admin/products/search?searchQuery=${searchTerm}&currentPage=${currentPage}`
+        `/admin/products/search?searchQuery=${searchTerm}&currentPage=${1}`
       );
     },
     [currentPage, navigate]
   );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [sortField]);
 
   return (
     <>
@@ -78,6 +83,7 @@ const ProductsPage = React.memo(() => {
       </div>
       <Routes>
         <Route path="/" element={<Products sortField={sortField} />} />
+        <Route path="/new" element={<NewProduct />} />
         <Route
           path="/search"
           element={<SearchResults sortField={sortField} />}

@@ -1,3 +1,10 @@
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Pagination,
   PaginationContent,
@@ -16,7 +23,9 @@ import {
 } from "@/components/ui/table";
 import { Product } from "@/types";
 import axios from "axios";
+import { Edit, Eye, MoreVertical, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Products = ({ sortField }: { sortField: string }) => {
@@ -25,6 +34,8 @@ const Products = ({ sortField }: { sortField: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const navigate = useNavigate();
 
   const fetchProducts = async () => {
     setIsLoading(true);
@@ -73,9 +84,25 @@ const Products = ({ sortField }: { sortField: string }) => {
     setCurrentPage(page);
   };
 
+  const handleViewProduct = (productId: string) => {
+    console.log("View product", productId);
+  };
+
+  const handleEditProduct = (productId: string) => {
+    console.log("Edit product", productId);
+  };
+
+  const handleDeleteProduct = (productId: string) => {
+    console.log("Delete product", productId);
+  };
+
   useEffect(() => {
     fetchProducts();
   }, [currentPage, sortField]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [sortField]);
 
   return (
     <div>
@@ -89,6 +116,7 @@ const Products = ({ sortField }: { sortField: string }) => {
               <TableHead>Price</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Rating</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -100,7 +128,13 @@ const Products = ({ sortField }: { sortField: string }) => {
               </TableRow>
             ) : (
               products.map((product, index) => (
-                <TableRow key={product._id}>
+                <TableRow
+                  key={product._id}
+                  onClick={() => {
+                    navigate(`/admin/products/edit/${product._id}`);
+                  }}
+                  className="cursor-pointer"
+                >
                   <TableCell className="w-10">{index + 1}</TableCell>
                   <TableCell>
                     <img
@@ -117,6 +151,37 @@ const Products = ({ sortField }: { sortField: string }) => {
                   {product.rating && (
                     <TableCell>{product.rating.rate.toFixed(1)}</TableCell>
                   )}
+                  {!product.rating && <TableCell>-</TableCell>}
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="w-8 h-8 p-0">
+                          <span className="sr-only">Open menu</span>
+                          <MoreVertical className="w-4 h-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => handleViewProduct(product._id)}
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          View
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleEditProduct(product._id)}
+                        >
+                          <Edit className="w-4 h-4 mr-2" />
+                          Edit
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleDeleteProduct(product._id)}
+                        >
+                          <Trash className="w-4 h-4 mr-2" />
+                          Delete
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
                 </TableRow>
               ))
             )}
