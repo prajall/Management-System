@@ -15,6 +15,7 @@ import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import Header from "../components/Header";
 const EditProduct = () => {
   const { productId } = useParams();
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
@@ -159,133 +160,148 @@ const EditProduct = () => {
 
   return (
     <div className="flex-1 overflow-auto">
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <Header pageTitle="Edit Product" />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-16">
         <Card>
           <CardHeader>
             <CardTitle>General Information</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <Label htmlFor="title">Product Title</Label>
-              <Input
-                {...register("title", {
-                  required: "Product Title is required",
-                })}
-                className="mt-1"
-                id="title"
-                placeholder="Enter product title"
-              />
-              {errors.title && (
-                <p className="text-red-500">
-                  {errors.title.message?.toString()}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label>Product Description</Label>
-              <Textarea
-                {...register("description", {
-                  required: "Product Description is required",
-                })}
-                className="mt-1"
-                style={{ resize: "none" }}
-                rows={4}
-                id="description"
-                placeholder="Enter product description"
-              />
-              {errors.description && (
-                <p className="text-red-500">
-                  {errors.description.message?.toString()}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="stock">Stock</Label>
-              <Input
-                {...register("stock", {
-                  required: "Stock is required",
-                })}
-                className="mt-1"
-                id="stock"
-                type="number"
-                placeholder="Enter stock quantity"
-              />
-              {errors.stock && (
-                <p className="text-red-500">
-                  {errors.stock.message?.toString()}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="brand">Brand/Manufacturer</Label>
-              <Input
-                {...register("brand", {
-                  required: "Brand/Manufacturer is required",
-                })}
-                className="mt-1"
-                id="brand"
-                placeholder="Enter brand or manufacturer"
-              />
-              {errors.brand && (
-                <p className="text-red-500">
-                  {errors.brand.message?.toString()}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="variations">
-                Variations{" "}
-                <span className="text-muted-foreground text-xs">
-                  (optional)
-                </span>
-              </Label>
-              {variations.length > 0 && (
-                <div className="flex gap-2 my-2 flex-wrap">
-                  {variations.map((variation, index) => (
-                    <div
-                      className="flex items-center gap-1 bg-gray-200 px-2 pl-3 py-1 rounded-full "
-                      key={index}
-                    >
-                      <p className="text-sm">{variation}</p>
-                      <button
-                        type="button"
-                        className="p-1"
-                        onClick={() =>
-                          setVariations(
-                            variations.filter((_, i) => i !== index)
-                          )
-                        }
-                      >
-                        <X size={12} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <div className="flex gap-2 mt-1">
+          <CardContent className="flex flex-col lg:flex-row gap-4">
+            <div className="w-full lg:w-1/2 space-y-4">
+              <div>
+                <Label htmlFor="title">Product Title</Label>
                 <Input
-                  {...register("variations")}
-                  id="variations"
-                  placeholder="Enter product variations: Size/Colour/Material etc."
-                  value={variationInput}
-                  onChange={(e) => setVariationInput(e.target.value)}
+                  {...register("title", {
+                    required: "Product Title is required",
+                  })}
+                  className="mt-1"
+                  id="title"
+                  placeholder="Enter product title"
                 />
-                <Button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setVariations([...variations, variationInput]);
-                    setVariationInput("");
-                  }}
-                >
-                  Add Variation
-                </Button>
+                {errors.title && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.title.message?.toString()}
+                  </p>
+                )}
               </div>
-              {errors.variations && (
-                <p className="text-red-500">
-                  {errors.variations.message?.toString()}
-                </p>
-              )}
+              <div>
+                <Label>Product Description</Label>
+                <Textarea
+                  {...register("description", {
+                    required: "Product Description is required",
+                  })}
+                  className="mt-1"
+                  style={{ resize: "none" }}
+                  rows={7}
+                  id="description"
+                  placeholder="Enter product description"
+                />
+                {errors.description && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.description.message?.toString()}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="w-full lg:w-1/2 space-y-4">
+              <div>
+                <Label htmlFor="stock">Stock</Label>
+                <Input
+                  {...register("stock", {
+                    required: "Stock is required",
+                  })}
+                  className="mt-1"
+                  id="stock"
+                  type="number"
+                  placeholder="Enter stock quantity"
+                />
+                {errors.stock && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.stock.message?.toString()}
+                  </p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="brand">Brand/Manufacturer</Label>
+                <Input
+                  {...register("brand", {
+                    required: "Brand/Manufacturer is required",
+                  })}
+                  className="mt-1"
+                  id="brand"
+                  placeholder="Enter brand or manufacturer"
+                />
+                {errors.brand && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.brand.message?.toString()}
+                  </p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="variations">
+                  Variations{" "}
+                  <span className="text-muted-foreground text-xs">
+                    (optional)
+                  </span>
+                </Label>
+                {variations.length > 0 && (
+                  <div className="flex gap-2 my-2 flex-wrap">
+                    {variations.map((variation, index) => (
+                      <div
+                        className="flex items-center gap-1 bg-gray-200 px-2 pl-3 py-1 rounded-full "
+                        key={index}
+                      >
+                        <p className="text-sm">{variation}</p>
+                        <button
+                          type="button"
+                          className="p-1"
+                          onClick={() =>
+                            setVariations(
+                              variations.filter((_, i) => i !== index)
+                            )
+                          }
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="flex gap-2 mt-1">
+                  <Input
+                    {...register("variations")}
+                    id="variations"
+                    placeholder="Enter product variations: Size/Colour/Material etc."
+                    value={variationInput}
+                    onChange={(e) => {
+                      setVariationInput(e.target.value);
+                      clearErrors("variations");
+                    }}
+                  />
+                  <Button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (variationInput.trim() === "") {
+                        setError("variations", {
+                          message: "Variation is required",
+                        });
+                        return;
+                      }
+                      setVariations([...variations, variationInput]);
+                      setVariationInput("");
+                    }}
+                  >
+                    Add
+                  </Button>
+                </div>
+                {errors.variations && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.variations.message?.toString()}
+                  </p>
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>

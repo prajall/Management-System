@@ -4,36 +4,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Link, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { sidebarItems } from "../sidebarItems";
 
-const Sidebar = ({
-  setPageTitle,
-  closeSidebar,
-}: {
-  setPageTitle: (title: string) => void;
-  closeSidebar: () => void;
-}) => {
-  const location = useLocation();
-
-  useEffect(() => {
-    const currentPath = location.pathname;
-    const currentItem = sidebarItems
-      .flatMap((section) => section.items)
-      .find((item) => item.href === currentPath);
-    if (currentItem) {
-      setPageTitle(currentItem.name);
-    } else if (currentPath === "/admin") {
-      setPageTitle("Dashboard");
-    }
-  }, [location, setPageTitle]);
-
-  const handleLinkClick = (title: string) => {
-    setPageTitle(title);
-    if (closeSidebar) closeSidebar();
-  };
-
+const Sidebar = () => {
   return (
     <aside className="w-56 xl:w-60 bg-primary text-white h-screen overflow-y-auto">
       <div className="p-4">
@@ -43,7 +17,6 @@ const Sidebar = ({
         <Link
           className="block px-4 py-4 font-semibold hover:bg-secondary border-b border-primary"
           to="/admin"
-          onClick={() => handleLinkClick("Dashboard")}
         >
           Dashboard
         </Link>
@@ -64,7 +37,6 @@ const Sidebar = ({
                       <Link
                         to={item.href}
                         className="block hover:underline  px-4 pl-5 py-2"
-                        onClick={() => handleLinkClick(item.name)}
                       >
                         {item.name}
                       </Link>

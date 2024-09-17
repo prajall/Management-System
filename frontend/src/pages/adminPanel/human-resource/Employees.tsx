@@ -31,6 +31,8 @@ import { RoleProp, UserProp } from "@/types";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Header from "../components/Header";
+import { PlusIcon } from "lucide-react";
 
 const Employees = () => {
   const [users, setUsers] = useState<UserProp[]>([]);
@@ -183,7 +185,12 @@ const Employees = () => {
 
   return (
     <div className="">
-      <div className="flex flex-wrap items-center gap-4 mb-4">
+      <Header
+        pageTitle="Employees"
+        addFunction={() => {}}
+        buttonText={<PlusIcon size={16} />}
+      />
+      <div className="flex mt-16 flex-wrap items-center gap-4 mb-4">
         <div className="flex items-center gap-2">
           <p className="text-sm font-semibold whitespace-nowrap">Sort By</p>
           <Select
@@ -283,7 +290,7 @@ const Employees = () => {
             <strong>{selectedRole}</strong>?
           </DialogDescription>
           <DialogFooter>
-            <Button onClick={() => setOpenDialog(false)} variant="secondary">
+            <Button onClick={() => setOpenDialog(false)} variant="outline">
               Cancel
             </Button>
             <Button
@@ -303,7 +310,7 @@ const Employees = () => {
             Are you sure you want to delete this user ?
           </DialogDescription>
           <DialogFooter>
-            <Button onClick={() => setOpenDialog(false)} variant="secondary">
+            <Button onClick={() => setOpenDialog(false)} variant="outline">
               Cancel
             </Button>
             <Button

@@ -15,6 +15,9 @@ import Products from "./components/Products";
 import SearchResults from "./SearchResults";
 import SearchForm from "./components/SearchForm";
 import NewProduct from "./NewProduct";
+import Header from "../components/Header";
+import EditProduct from "./EditProduct";
+import { Plus, PlusIcon } from "lucide-react";
 
 const ProductsPage = React.memo(() => {
   console.log("ProductsPage");
@@ -47,6 +50,13 @@ const ProductsPage = React.memo(() => {
 
   return (
     <>
+      <Header
+        pageTitle="Products"
+        addFunction={() => {
+          navigate("/admin/products/new");
+        }}
+        buttonText={<PlusIcon size={16} />}
+      />
       <div className="mb-4 flex flex-col gap-4">
         <div className="flex items-center gap-4">
           {/* <Header title="Products" description="Manage your Products" /> */}
@@ -83,7 +93,7 @@ const ProductsPage = React.memo(() => {
       </div>
       <Routes>
         <Route path="/" element={<Products sortField={sortField} />} />
-        <Route path="/new" element={<NewProduct />} />
+
         <Route
           path="/search"
           element={<SearchResults sortField={sortField} />}

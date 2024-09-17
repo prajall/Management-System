@@ -3,13 +3,11 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 // import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import ManageProducts from "./pages/ManageProducts";
 import ManageUsers from "./pages/adminPanel/human-resource/Employees";
 // import NewProduct from "./pages/NewProduct";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Setup from "./pages/Setup";
-import ThemeChanger from "./pages/ThemeChanger";
 import RoleManagement from "./pages/adminPanel/human-resource/RoleManagement";
 import MainPage from "./pages/adminPanel/MainPage";
 function App() {
@@ -73,18 +71,12 @@ function App() {
       {/* <Navbar /> */}
       <div className="">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<MainPage />} />
           <Route path="/admin/*" element={<MainPage />} />
           <Route path="/install" element={<Setup />} />
-          <Route path="/themes" element={<ThemeChanger />} />
           <Route path="/roles" element={<RoleManagement />} />
           <Route path="/login" element={<Login />} />
           <Route path="/manage-users" element={<ManageUsers />} />
-
-          <Route path="/manage-products" element={<ManageProducts />} />
-          {/* <Route path="/manage-products/new" element={<NewProduct />} />
-          <Route path="/manage-products/:id" element={<NewProduct />} /> */}
-          {/* <Route path="/manage-products/:id/edit" element={<NewProduct />} /> */}
         </Routes>
       </div>
     </>

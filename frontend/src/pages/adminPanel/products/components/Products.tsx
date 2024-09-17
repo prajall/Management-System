@@ -48,6 +48,7 @@ const Products = ({ sortField }: { sortField: string }) => {
             limit: 15,
             sort: sortField,
           },
+          withCredentials: true,
         }
       );
       console.log("products", response.data);

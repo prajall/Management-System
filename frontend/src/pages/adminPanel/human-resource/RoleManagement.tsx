@@ -17,9 +17,10 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import Header from "@/components/Header";
 import { RoleProp } from "@/types";
 import ModulePermissions from "@/components/ModulePermissions";
+import Header from "../components/Header";
+import { PlusIcon } from "lucide-react";
 
 const RoleManagement = () => {
   const [isFetching, setIsFetching] = useState(false);
@@ -105,12 +106,9 @@ const RoleManagement = () => {
 
   return (
     <div>
-      <Header
-        title="Role Management"
-        description="Manage Roles and Permissions each role can have"
-      />
+      <Header pageTitle="Role Management" />
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
+        <DialogTrigger className="mt-16" asChild>
           <Button
             className="bg-primary text-white"
             onClick={() => setIsDialogOpen(true)}

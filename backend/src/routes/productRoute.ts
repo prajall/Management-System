@@ -28,8 +28,13 @@ Router.patch(
   upload.array("images"),
   updateProduct
 );
-// Router.get("/", checkPermission("Product", "View"), viewAllProducts);
-Router.get("/", viewAllProducts);
+Router.get(
+  "/",
+  authChecker,
+  checkPermission("Product", "View"),
+  viewAllProducts
+);
+// Router.get("/", viewAllProducts);
 Router.get("/latest", authChecker, adminChecker, getLatestProducts);
 Router.get("/search", searchProductByTitle);
 Router.get(

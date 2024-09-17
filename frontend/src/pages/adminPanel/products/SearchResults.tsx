@@ -55,6 +55,7 @@ const SearchResults = ({ sortField }: { sortField: string }) => {
             limit: 15,
             sort: sortField,
           },
+          withCredentials: true,
         }
       );
       console.log("searchResults", response.data);

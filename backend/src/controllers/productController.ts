@@ -84,12 +84,6 @@ export const createProduct = async (req: Request, res: Response) => {
   }
 };
 
-export const newProduct = async (req: Request, res: Response) => {
-  console.log("req.files", req.files);
-  console.log("req.body", req.body);
-  res.send("Create products");
-};
-
 // export const createProduct = async (req: Request, res: Response) => {
 //   try {
 //     // const { title, description, price } = req.body;
