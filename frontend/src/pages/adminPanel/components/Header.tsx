@@ -3,15 +3,18 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useState } from "react";
 import Sidebar from "./Sidebar";
+import { Link } from "react-router-dom";
 
 const Header = ({
   pageTitle,
   addFunction,
   buttonText,
+  link,
 }: {
   pageTitle: string;
   addFunction?: () => void;
   buttonText?: any;
+  link?: string;
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -30,13 +33,15 @@ const Header = ({
       <h1 className="text-2xl ml-10 lg:ml-0 font-semibold text-white px-4 h-16 flex items-center">
         {pageTitle}
       </h1>
-      {addFunction && (
-        <button
-          onClick={addFunction}
-          className="h-8 w-8 flex items-center rounded-full justify-center hover:bg-white/20 text-white font-bold"
-        >
-          {buttonText}
-        </button>
+      {link && (
+        <Link to={link}>
+          <button
+            onClick={addFunction}
+            className="h-8 w-8 flex items-center rounded-full justify-center hover:bg-white/20 text-white font-bold"
+          >
+            {buttonText}
+          </button>
+        </Link>
       )}
     </header>
   );

@@ -12,6 +12,7 @@ import Countries from "./master/Countries";
 import EditProduct from "./products/EditProduct";
 import NewProduct from "./products/NewProduct";
 import ProductsPage from "./products/ProductsPage";
+import AddEmployee from "./human-resource/AddEmployee";
 
 const MainPage = () => {
   console.log("MainPage");
@@ -46,6 +47,7 @@ const MainPage = () => {
             <Route path="/products/*" element={<ProductsPage />} />
             <Route path="/products/new" element={<NewProduct />} />
             <Route path="/products/edit/:productId" element={<EditProduct />} />
+            <Route path="/employees/new" element={<AddEmployee />} />
           </Routes>
         </div>
       </div>

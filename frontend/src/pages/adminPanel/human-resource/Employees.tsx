@@ -187,7 +187,7 @@ const Employees = () => {
     <div className="">
       <Header
         pageTitle="Employees"
-        addFunction={() => {}}
+        link={"/admin/employees/new"}
         buttonText={<PlusIcon size={16} />}
       />
       <div className="flex mt-16 flex-wrap items-center gap-4 mb-4">

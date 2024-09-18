@@ -6,9 +6,9 @@ import productRoute from "./routes/productRoute";
 import roleRoute from "./routes/roleRoute";
 import userRoute from "./routes/userRoute";
 import installationRoute from "./routes/installation";
+import employeeRoute from "./routes/employeeRoute";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
-
 import jwt from "jsonwebtoken";
 import bodyParser from "body-parser";
 import multer from "multer";
@@ -47,6 +47,7 @@ app.use("/permission", permissionRoute);
 app.use("/role", roleRoute);
 app.use("/product", productRoute);
 app.use("/installation", installationRoute);
+app.use("/employee", employeeRoute);
 
 app.get("/env", (req, res) => {
   try {

@@ -18,9 +18,13 @@ export interface UserProp {
   updatedAt: Date;
 }
 
+export interface Area {
+  name: string;
+}
+
 export interface City {
   name: string;
-  areas: string[];
+  areas: Area[];
 }
 
 export interface Country {
@@ -44,4 +48,29 @@ export interface Product {
     rate: number;
     count: number;
   };
+}
+
+export interface Address {
+  country: string;
+  state: string;
+  city: string;
+  addressLine: string;
+}
+
+export interface Employee {
+  name: string;
+  gender: "Male" | "Female";
+  email: string;
+  password: string;
+  mobileNo: string;
+  joinDate: Date;
+  leftDate?: Date;
+  image?: string;
+  branch: string;
+  role: string;
+  dateOfBirth?: Date;
+  landlineNo?: string;
+  address: Address;
+  createdAt: Date;
+  updatedAt: Date;
 }
