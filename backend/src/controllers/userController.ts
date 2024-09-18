@@ -86,7 +86,7 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 
   // const loggedInUser = await User.findById(user._id).select("-password");
-  const userObj = user.toObject();
+  const userObj = user.toObject() as any;
   if (userObj.password) {
     delete userObj.password;
   }
