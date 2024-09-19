@@ -86,6 +86,7 @@ export default function AddEmployee() {
 
       if (profileImage) {
         formData.append("profileImage", profileImage);
+        //add
       }
 
       console.log("formData", formData);
