@@ -75,6 +75,17 @@ module.exports = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      container: {
+        center: true,
+        padding: "1rem",
+        screens: {
+          sm: "100%",
+          md: "100%",
+          lg: "900px",
+          xl: "1200px",
+          "2xl": "1440px",
+        },
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],

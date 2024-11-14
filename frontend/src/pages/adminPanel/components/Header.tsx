@@ -1,9 +1,8 @@
-import Button from "@/components/Buttons";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { useState } from "react";
-import Sidebar from "./Sidebar";
 import { Link } from "react-router-dom";
+import Sidebar from "./Sidebar";
 
 const Header = ({
   pageTitle,

@@ -1,5 +1,5 @@
 import { AppContext } from "@/contexts/Appcontext";
-import Sidebar from "@/pages/adminPanel/components/Sidebar";
+import Sidebar from "@/pages/adminPanel/components/SidebarNew";
 import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import Settings from "./administration/Settings";
@@ -34,10 +34,12 @@ const MainPage = () => {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 lg:ml-56 xl:ml-60 flex flex-col">
+      <div className="flex-1 lg:ml-56 xl:ml-72 flex flex-col">
         <div className=" w-full overflow-hidden p-4">
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+
             <Route path="/employees" element={<ManageUsers />} />
             <Route path="/roles-permissions" element={<RoleManagement />} />
             <Route path="/settings" element={<Settings />} />
