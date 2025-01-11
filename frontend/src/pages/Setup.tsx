@@ -24,7 +24,7 @@ const Setup = () => {
     try {
       console.log(data);
       const response = await axios.post(
-        "http://localhost:3001/installation/add-config",
+        `${import.meta.env.VITE_API_URL}/installation/add-config`,
         { appName: data.appName }
       );
       if (response.status == 200) {
@@ -53,7 +53,7 @@ const Setup = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "http://localhost:3001/installation/add-env",
+        `${import.meta.env.VITE_API_URL}/installation/add-env`,
         { productKey: data.productKey }
       );
       if (response.status == 200) {
@@ -74,7 +74,7 @@ const Setup = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "http://localhost:3001/installation/add-env",
+        `${import.meta.env.VITE_API_URL}/installation/add-env`,
         { dbUrl: data.dbUrl, apiKey: data.apiKey }
       );
       if (response.status == 200) {
@@ -98,7 +98,7 @@ const Setup = () => {
     setIsSubmitting(true);
     try {
       const response = await axios.post(
-        "http://localhost:3001/installation/finish-installation"
+        `${import.meta.env.VITE_API_URL}/installation/finish-installatio`
       );
       if (response.status == 200) {
         toast.success("Setup Completed");

@@ -18,7 +18,7 @@ function App() {
     try {
       // console.log(process.env.SERVER_URL);
       const response = await axios.get(
-        "http://localhost:3001/installation/check-config"
+        `${import.meta.env.VITE_API_URL}/installation/check-config`
       );
       console.log("Config Checking Response:", response.data);
 
