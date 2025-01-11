@@ -42,6 +42,9 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 
 // SETUP ROUTES
+app.get("/", (req, res) => {
+  res.send("Server is working");
+});
 app.use("/user", userRoute);
 app.use("/permission", permissionRoute);
 app.use("/role", roleRoute);
