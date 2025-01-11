@@ -1,26 +1,25 @@
-import { useEffect, useState } from "react";
+import ModulePermissions from "@/components/ModulePermissions";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import axios from "axios";
-import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { RoleProp } from "@/types";
-import ModulePermissions from "@/components/ModulePermissions";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import Header from "../components/Header";
-import { PlusIcon } from "lucide-react";
 
 const RoleManagement = () => {
   const [isFetching, setIsFetching] = useState(false);

@@ -35,7 +35,6 @@ const menuItems = [
 export default function Sidebar() {
   const location = useLocation();
   const currentPath = location.pathname.split("/")[2];
-  const [activeItem, setActiveItem] = React.useState("Dashboard");
   const [hoveredItem, setHoveredItem] = React.useState<string | null>(null);
 
   return (
@@ -51,7 +50,6 @@ export default function Sidebar() {
                       ? "bg-primary text-white shadow-sm shadow-primary"
                       : "text-gray-700"
                   }`}
-                onClick={() => setActiveItem(item.name)}
                 onMouseEnter={() => setHoveredItem(item.name)}
                 onMouseLeave={() => setHoveredItem(null)}
               >

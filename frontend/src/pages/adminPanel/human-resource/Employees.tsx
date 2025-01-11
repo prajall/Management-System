@@ -176,9 +176,8 @@ const Employees = () => {
     const filteredUsers = users?.filter(
       (user) =>
         user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (user.name
-          ? user.name
-          : "" && user.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+        (user.name &&
+          user.name.toLowerCase().includes(searchTerm.toLowerCase()))
     );
     setFilteredUsers(filteredUsers);
   }, [searchTerm, users]);

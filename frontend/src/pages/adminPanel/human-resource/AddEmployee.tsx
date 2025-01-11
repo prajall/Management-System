@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -12,13 +10,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { Image, X } from "lucide-react";
-import Header from "../components/Header";
 import { Area, City, Country, RoleProp } from "@/types";
+import axios from "axios";
+import { Image, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Header from "../components/Header";
 
 export default function AddEmployee() {
   const [profileImage, setProfileImage] = useState<File | null>(null);

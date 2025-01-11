@@ -1,20 +1,14 @@
-import React from "react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
+import axios from "axios";
 import { Star } from "lucide-react";
+import React from "react";
+import { toast } from "react-toastify";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { toast } from "react-toastify";
-import axios from "axios";
 
 interface ProductProps {
   product: {

@@ -8,16 +8,14 @@ import {
 } from "@/components/ui/select";
 import { AppContext } from "@/contexts/Appcontext";
 import { checkPermission } from "@/lib/utils";
+import { PlusIcon } from "lucide-react";
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Products from "./components/Products";
-import SearchResults from "./SearchResults";
-import SearchForm from "./components/SearchForm";
-import NewProduct from "./NewProduct";
 import Header from "../components/Header";
-import EditProduct from "./EditProduct";
-import { Plus, PlusIcon } from "lucide-react";
+import Products from "./components/Products";
+import SearchForm from "./components/SearchForm";
+import SearchResults from "./SearchResults";
 
 const ProductsPage = React.memo(() => {
   console.log("ProductsPage");

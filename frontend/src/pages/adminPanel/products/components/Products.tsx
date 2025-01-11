@@ -25,7 +25,7 @@ import { Product } from "@/types";
 import axios from "axios";
 import { Edit, Eye, MoreVertical, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Products = ({ sortField }: { sortField: string }) => {
