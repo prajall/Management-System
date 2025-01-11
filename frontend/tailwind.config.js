@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -7,13 +7,16 @@ module.exports = {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
-  prefix: "",
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
-        "2xl": "1400px",
+        sm: "100%",
+        md: "100%",
+        lg: "900px",
+        xl: "1200px",
+        "2xl": "1440px",
       },
     },
     extend: {
@@ -74,17 +77,6 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-      },
-      container: {
-        center: true,
-        padding: "1rem",
-        screens: {
-          sm: "100%",
-          md: "100%",
-          lg: "900px",
-          xl: "1200px",
-          "2xl": "1440px",
-        },
       },
     },
   },
