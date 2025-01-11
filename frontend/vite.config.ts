@@ -10,6 +10,6 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: "../backend/UI", // Set the output directory
+    outDir: "dist", // Set the output directory
   },
 });
