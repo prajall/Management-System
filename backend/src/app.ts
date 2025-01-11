@@ -30,7 +30,10 @@ export default app;
 
 app.use(
   cors({
-    origin: "*",
+    origin: [
+      "http://localhost:3001",
+      "https://management-system-prajal.vercel.app",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
