@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Role } from "../models/roleModel";
-import { Permission } from "../models/permissionModel";
 import { User } from "../models/userModel";
 import { sendUpdatedRole } from "../routes/roleRoute";
 
@@ -26,6 +25,7 @@ export const getAllRoles = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 export const getAllRolesWithAdmin = async (req: Request, res: Response) => {
   try {
     let roles = await Role.find({ name: { $ne: "Master" } }).sort({
@@ -60,6 +60,7 @@ export const createRole = async (req: Request, res: Response) => {
     const roleDoc = await Role.find({ name: { $ne: "Master" } }).sort({
       permissions: -1,
     });
+
     if (roleDoc) {
       sendUpdatedRole(roleDoc);
     }

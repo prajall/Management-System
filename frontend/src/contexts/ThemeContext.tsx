@@ -18,7 +18,7 @@ const defaultThemeContext: ThemeContextType = {
 
 export const availableThemes: Record<string, ThemeProp> = {
   blue: {
-    primary: "rgb(0, 53, 89)",
+    primary: "rgb(0, 112, 186)",
     secondary: "rgb(3, 83, 164)",
     dark: "rgb(6, 26, 64)",
   },

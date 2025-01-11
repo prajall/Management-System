@@ -15,7 +15,7 @@ export const checkPermission = (module: string, action: string) => {
       }
 
       const roleDoc = await Role.findById(userRole);
-
+     
       if (!roleDoc) {
         console.log("no role doc");
         return res.status(403).json({ message: "User's Role not found" });

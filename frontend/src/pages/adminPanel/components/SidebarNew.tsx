@@ -45,10 +45,9 @@ export default function Sidebar() {
           {menuItems.map((item) => (
             <Link to={item.link} key={item.name}>
               <button
-                className={`w-full text-left p-3 mt-3 flex items-center rounded-xl ease-in-out
+                className={`w-full text-left p-3 mt-3 flex items-center rounded-xl  ease-in-out
                   ${
-                    item.link.split("/")[1] === currentPath ||
-                    hoveredItem === item.name
+                    item.link === currentPath || hoveredItem === item.name
                       ? "bg-primary text-white shadow-sm shadow-primary"
                       : "text-gray-700"
                   }`}

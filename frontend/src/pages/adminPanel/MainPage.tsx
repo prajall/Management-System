@@ -1,5 +1,5 @@
 import { AppContext } from "@/contexts/Appcontext";
-import Sidebar from "@/pages/adminPanel/components/SidebarNew";
+import Sidebar from "@/pages/adminPanel/components/Sidebar";
 import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import Settings from "./administration/Settings";
